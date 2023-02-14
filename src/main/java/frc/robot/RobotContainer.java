@@ -7,9 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -22,9 +24,32 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+   /* D-Pad setup */
+  /*Joystick dPad;
+  Direction dPadDirection;
+     
+  public void DPadButton(Joystick dPad, Direction dPadDirection) {
+    this.dPad = dPad;
+    this.dPadDirection = dPadDirection;
+  }
+     
+  public static enum Direction {
+    UP(0), RIGHT(90), DOWN(180), LEFT(270);
+     
+    int direction;
+     
+    private Direction(int direction) {
+      this.direction = direction;
+    }
+  }*/
+
+
+
   /* Controllers */
   private final Joystick driver = new Joystick(0);
-
+  //private XboxController controller = new XboxController(0);
+  
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
   private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -33,6 +58,15 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
+
+
+  /* POV */
+  POVButton dpadUp = new POVButton(driver, 0);
+  POVButton dpadRight = new POVButton(driver, 90);
+  POVButton dpadDown = new POVButton(driver, 180);
+  POVButton dpadLeft = new POVButton(driver, 270);
+  
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -48,6 +82,18 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  /*public boolean get() {
+    int dPadValue = dPad.getPOV();
+    System.out.println("D-pad POV is " + dPadValue);
+    return (dPadValue == dPadDirection.direction) || (dPadValue == (dPadDirection.direction + 45) % 360) || (dPadValue == (dPadDirection.direction + 315) % 360);
+  }*/
+
+  public static boolean isCone = false;
+
+
+  // private final JoystickButton pieceMode = new JoystickButton(dPad, XboxController.Button.kX.value);
+
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -56,8 +102,25 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    //pieceMode.onTrue(new InstantCommand(() -> toggleGamePiece()));
+    xButton.onTrue(new InstantCommand(() -> toggleGamePiece()));
+
+    dpadUp.onTrue(new RotateToHeading(s_Swerve, 0));
+    dpadRight.onTrue(new RotateToHeading(s_Swerve, 90));
+    dpadDown.onTrue(new RotateToHeading(s_Swerve, 180));
+    dpadLeft.onTrue(new RotateToHeading(s_Swerve, 270));
+
+    dpadUp.onTrue(new InstantCommand(() -> dPadPOV(0)));
+    dpadRight.onTrue(new InstantCommand(() -> dPadPOV(90)));
+    dpadDown.onTrue(new InstantCommand(() -> dPadPOV(180)));
+    dpadLeft.onTrue(new InstantCommand(() -> dPadPOV(270)));
+
+    
   }
+
+
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -67,5 +130,23 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return new exampleAuto(s_Swerve);
+  }
+
+  public void dPadPOV (int angle) {
+
+    System.out.println("D-Pad Angle is " + angle);
+    SmartDashboard.putNumber("Angle", angle);
+
+
+  }
+
+
+
+  public void toggleGamePiece() {
+
+    isCone = !isCone;
+    System.out.println("isCone is " + isCone);
+    SmartDashboard.putBoolean("Cone Or Cube", isCone);
+
   }
 }
