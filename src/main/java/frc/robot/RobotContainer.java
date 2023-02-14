@@ -24,28 +24,7 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
-   /* D-Pad setup */
-  /*Joystick dPad;
-  Direction dPadDirection;
-     
-  public void DPadButton(Joystick dPad, Direction dPadDirection) {
-    this.dPad = dPad;
-    this.dPadDirection = dPadDirection;
-  }
-     
-  public static enum Direction {
-    UP(0), RIGHT(90), DOWN(180), LEFT(270);
-     
-    int direction;
-     
-    private Direction(int direction) {
-      this.direction = direction;
-    }
-  }*/
-
-
-
+   
   /* Controllers */
   private final Joystick driver = new Joystick(0);
   //private XboxController controller = new XboxController(0);
@@ -82,18 +61,8 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  /*public boolean get() {
-    int dPadValue = dPad.getPOV();
-    System.out.println("D-pad POV is " + dPadValue);
-    return (dPadValue == dPadDirection.direction) || (dPadValue == (dPadDirection.direction + 45) % 360) || (dPadValue == (dPadDirection.direction + 315) % 360);
-  }*/
-
   public static boolean isCone = false;
-
-
-  // private final JoystickButton pieceMode = new JoystickButton(dPad, XboxController.Button.kX.value);
-
-
+   
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -103,9 +72,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    //pieceMode.onTrue(new InstantCommand(() -> toggleGamePiece()));
     xButton.onTrue(new InstantCommand(() -> toggleGamePiece()));
 
+    /* D-Pad Controller Input Detection */
     dpadUp.onTrue(new RotateToHeading(s_Swerve, 0));
     dpadRight.onTrue(new RotateToHeading(s_Swerve, 90));
     dpadDown.onTrue(new RotateToHeading(s_Swerve, 180));
@@ -132,6 +101,7 @@ public class RobotContainer {
     return new exampleAuto(s_Swerve);
   }
 
+  /* Outputs D-Pad POV Value In Dashboard */
   public void dPadPOV (int angle) {
 
     System.out.println("D-Pad Angle is " + angle);
@@ -140,8 +110,7 @@ public class RobotContainer {
 
   }
 
-
-
+  /* Flips isCone Boolean */
   public void toggleGamePiece() {
 
     isCone = !isCone;
