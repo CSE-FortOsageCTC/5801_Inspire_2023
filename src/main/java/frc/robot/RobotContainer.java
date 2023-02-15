@@ -78,7 +78,6 @@ public class RobotContainer {
 
 
 =======
-  public static boolean isCone = false;
    
 >>>>>>> 1b244f133f41d8f4a41c64827a5ce2d7b1f62c0c
   /**
