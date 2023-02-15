@@ -59,6 +59,8 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton gripButton = new JoystickButton(driver, XboxController.Button.kB.value);
+  private final JoystickButton gripButtonReverse = new JoystickButton(driver, XboxController.Button.kRightStick.value);
 
 
   /* POV */
@@ -70,6 +72,7 @@ public class RobotContainer {
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
+  private final Gripper s_Gripper = new Gripper();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -88,7 +91,7 @@ public class RobotContainer {
     return (dPadValue == dPadDirection.direction) || (dPadValue == (dPadDirection.direction + 45) % 360) || (dPadValue == (dPadDirection.direction + 315) % 360);
   }*/
 
-  public static boolean isCone = false;
+  public static boolean isCone = true;
 
 
   // private final JoystickButton pieceMode = new JoystickButton(dPad, XboxController.Button.kX.value);
@@ -105,6 +108,8 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     //pieceMode.onTrue(new InstantCommand(() -> toggleGamePiece()));
     xButton.onTrue(new InstantCommand(() -> toggleGamePiece()));
+    gripButton.whileTrue(new GripObject(s_Gripper, isCone, true));
+    gripButtonReverse.whileTrue(new GripObject(s_Gripper, isCone, false));
 
     dpadUp.onTrue(new RotateToHeading(s_Swerve, 0));
     dpadRight.onTrue(new RotateToHeading(s_Swerve, 90));
