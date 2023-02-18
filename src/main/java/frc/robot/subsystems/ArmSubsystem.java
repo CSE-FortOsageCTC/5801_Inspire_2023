@@ -7,13 +7,13 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
+  // Makes CANSparkMax variable "armMotor" with the ID of 17 and the MotorType Brushless
   private final CANSparkMax armMotor = new CANSparkMax(17, MotorType.kBrushless);
   
+  // Sets the speed of the motor to "speed" with the command "moveArm"
   public ArmSubsystem() {}
   public void moveArm(double speed){
     armMotor.set(speed);

@@ -7,17 +7,19 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-/** An example command that uses an example subsystem. */
 public class ArmCommand extends CommandBase {
+  // Set the ArmSubsystem as a variable, along with the variable speed located in ArmSubsystem
   private final ArmSubsystem m_ArmSubsystem;
   private final double speed;
 
-public ArmCommand(ArmSubsystem m_ArmSubsystem, double speed){
-  this.m_ArmSubsystem = m_ArmSubsystem;
+  // Sets the parameters to their respected variables.
+public ArmCommand(ArmSubsystem s_ArmSubsystem, double speed){
+  this.m_ArmSubsystem = s_ArmSubsystem;
   this.speed = speed;
-  addRequirements(m_ArmSubsystem);
+  addRequirements(s_ArmSubsystem);
 }
 
+// Moves arm, easy enough
 @Override
 public void execute(){
   m_ArmSubsystem.moveArm(speed);
