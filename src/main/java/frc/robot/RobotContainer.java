@@ -64,7 +64,7 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-<<<<<<< HEAD
+
   /*public boolean get() {
     int dPadValue = dPad.getPOV();
     System.out.println("D-pad POV is " + dPadValue);
@@ -77,10 +77,7 @@ public class RobotContainer {
   // private final JoystickButton pieceMode = new JoystickButton(dPad, XboxController.Button.kX.value);
 
 
-=======
-  public static boolean isCone = false;
-   
->>>>>>> 1b244f133f41d8f4a41c64827a5ce2d7b1f62c0c
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
