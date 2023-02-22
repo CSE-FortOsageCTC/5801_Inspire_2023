@@ -40,6 +40,7 @@ public class RobotContainer {
   private final JoystickButton xButton = new JoystickButton(driver, XboxController.Button.kX.value);
   private final JoystickButton gripButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton gripButtonReverse = new JoystickButton(driver, XboxController.Button.kRightStick.value);
+  private final JoystickButton autoBalance = new JoystickButton(driver, XboxController.Button.kB.value);
 
 
   /* POV */
@@ -64,6 +65,20 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  public void setDefault(){
+    boolean fieldRelative = true;
+    boolean openLoop = true;
+    s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop, throttle));
+  }
+  public void unsetDefault(){
+    s_Swerve.setDefaultCommand(null);
+  }
 
   /*public boolean get() {
     int dPadValue = dPad.getPOV();
@@ -102,6 +117,7 @@ public class RobotContainer {
     dpadDown.onTrue(new InstantCommand(() -> dPadPOV(180)));
     dpadLeft.onTrue(new InstantCommand(() -> dPadPOV(270)));
 
+    autoBalance.whileTrue(new AutoBalance(s_Swerve, true, true));
     
   }
 
@@ -115,7 +131,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new exampleAuto(s_Swerve);
+    //return new exampleAuto(s_Swerve);
+    return new AutoBalanceAuto(s_Swerve);
   }
 
   /* Outputs D-Pad POV Value In Dashboard */
