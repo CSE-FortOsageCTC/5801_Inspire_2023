@@ -95,7 +95,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new exampleAuto(s_Swerve);
+    return null; //new exampleAuto(s_Swerve);
   }
 
   /* Outputs D-Pad POV Value In Dashboard */
