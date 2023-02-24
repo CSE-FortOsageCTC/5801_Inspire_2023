@@ -26,13 +26,12 @@ public class RotateToHeading extends CommandBase{
         SmartDashboard.putNumber("kP", 0.007);
         SmartDashboard.putNumber("kI", 0.0025);
         SmartDashboard.putNumber("kD", 0.001);
-   }
+    }
 
    @Override
    public void initialize() {
     pidController.reset();
    }
-
 
    @Override
    public void execute () {
@@ -55,16 +54,11 @@ public class RotateToHeading extends CommandBase{
     double speed = pidController.calculate(s_Swerve.getYawDouble(), s_Swerve.getYawDouble() + headingError);
     s_Swerve.drive(new Translation2d(0, 0), speed * (Constants.Swerve.maxAngularVelocity), true, true);
     SmartDashboard.putNumber("Speed", speed);
-
-    
-
    }
 
    @Override
    public boolean isFinished () {
     return pidController.atSetpoint();
-    //double speed = pidController.calculate(s_Swerve.getYawDouble());
-    //return speed < 0.1;
    }
 
    @Override
