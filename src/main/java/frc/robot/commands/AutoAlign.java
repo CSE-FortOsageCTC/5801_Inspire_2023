@@ -18,14 +18,15 @@ public class AutoAlign extends CommandBase {
     private PIDController rotationPidController;
 
     private Swerve s_Swerve;
-    private Limelight limelight = new Limelight();
+    private Limelight limelight;
 
     /**
      * Constructer for AutoAlign
      * 
      * @param s_Swerve swerve subsystem to be aligned with the april tag
      */
-    public AutoAlign(Swerve s_Swerve) {
+    public AutoAlign(Swerve s_Swerve, boolean isCone) {
+        limelight = new Limelight(isCone);
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -36,8 +37,8 @@ public class AutoAlign extends CommandBase {
         
         // creating xTranslationPidController and setting the toleance and setpoint
         xTranslationPidController = new PIDController(0, 0, 0);
-        xTranslationPidController.setTolerance(5);
-        xTranslationPidController.setSetpoint(10);
+        xTranslationPidController.setTolerance(isCone? .1 : 2);//5);
+        xTranslationPidController.setSetpoint(isCone ? Constants.coneLimelightAreaSetpoint:Constants.cubeLimelightAreaSetpoint);
         
         
         rotationPidController = new PIDController(0, 0, 0);

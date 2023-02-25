@@ -31,6 +31,7 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton intakeInDriver = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
   private final JoystickButton intakeOutDriver = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton autoAlign = new JoystickButton(driver, XboxController.Button.kX.value);
 
   /* Operator Buttons */
   private final JoystickButton leftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
@@ -75,6 +76,7 @@ public class RobotContainer {
     rightBumper.onTrue(new InstantCommand(() -> Cube()));
     intakeInDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, 0.3));
     intakeOutDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, -0.3));
+    autoAlign.onTrue(new AutoAlign(s_Swerve, isCone));
 
     /* Operator Buttons */
     intakeInOp.whileTrue(new IntakeCommand(m_IntakeSubsystem, 0.3));
@@ -106,7 +108,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Angle", angle);
   }
 
-  public void Cone() {
+  public void Cone() { //TODO: change name to setIsCone
 
     isCone = true;
 

@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
  * this class retrieves limelight values from the networktable
@@ -18,8 +19,9 @@ public class Limelight extends SubsystemBase {
     /**
      * Constructs Limelight Class
      */
-    public Limelight() {
+    public Limelight(boolean isCone) {
         table = NetworkTableInstance.getDefault().getTable("limelight");
+        table.getEntry("pipeline").setNumber(isCone ? Constants.conePipeline: Constants.cubePipeline);
         tx = table.getEntry("tx");
         ty = table.getEntry("ty");
         ta = table.getEntry("ta");
