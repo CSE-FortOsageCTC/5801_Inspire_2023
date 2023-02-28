@@ -72,8 +72,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    leftBumper.onTrue(new InstantCommand(() -> Cone()));
-    rightBumper.onTrue(new InstantCommand(() -> Cube()));
+    leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
+    rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
     intakeInDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, 0.3));
     intakeOutDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, -0.3));
     autoAlign.onTrue(new AutoAlign(s_Swerve, isCone));
@@ -108,7 +108,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Angle", angle);
   }
 
-  public void Cone() { //TODO: change name to setIsCone
+  public void setIsCone() {
 
     isCone = true;
 
@@ -117,7 +117,7 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }
-  public void Cube() {
+  public void setIsCube() {
 
     isCone = false;
 
