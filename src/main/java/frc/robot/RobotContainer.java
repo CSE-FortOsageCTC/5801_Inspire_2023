@@ -56,6 +56,7 @@ public class RobotContainer {
   private final Swerve s_Swerve = new Swerve();
   private final LEDSubsystem s_LEDSubsystem = new LEDSubsystem();
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  private final ArmSubsystem s_ArmSubsystem = new ArmSubsystem();
 
   /* Variables */
   public static boolean isCone = true;
@@ -65,6 +66,7 @@ public class RobotContainer {
     boolean fieldRelative = true;
     boolean openLoop = true;
     s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop, throttle));
+    s_ArmSubsystem.setDefaultCommand(new TeleopArm(s_ArmSubsystem, operator));
 
     // Configure the button bindings
     configureButtonBindings();
