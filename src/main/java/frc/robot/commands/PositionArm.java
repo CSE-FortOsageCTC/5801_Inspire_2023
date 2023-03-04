@@ -23,9 +23,21 @@ public class PositionArm extends CommandBase{
         SmartDashboard.putNumber("Wrist P Value", 5.5);
         SmartDashboard.putNumber("Wrist I Value", 0);
         SmartDashboard.putNumber("Wrist D Value", 0);
+
+        SmartDashboard.putNumber("Elbow Setpoint", 0.75);
         SmartDashboard.putNumber("Elbow P Value", 10);
         SmartDashboard.putNumber("Elbow I Value", 0);
         SmartDashboard.putNumber("Elbow D Value", 0);
+
+        SmartDashboard.putNumber("Extension Setpoint", 0);
+        SmartDashboard.putNumber("Extension P Value", 0);
+        SmartDashboard.putNumber("Extension I Value", 0);
+        SmartDashboard.putNumber("Extension D Value", 0);
+
+        SmartDashboard.putNumber("Shoulder Setpoint", 0);
+        SmartDashboard.putNumber("Shoulder P Value", 0);
+        SmartDashboard.putNumber("Shoulder I Value", 0);
+        SmartDashboard.putNumber("Shoulder D Value", 0);
     }
 
    @Override
@@ -37,11 +49,16 @@ public class PositionArm extends CommandBase{
     
     double wristSetpoint = SmartDashboard.getNumber("Wrist Setpoint", 0.48);
     double elbowSetpoint = SmartDashboard.getNumber("Elbow Setpoint", 0.75);
+    double extensionSetpoint = SmartDashboard.getNumber("Extension Setpoint", 0);
+    double shoulderSetpoint = SmartDashboard.getNumber("Shoulder Setpoint", 0);
+
 
     //double speed = pidController.calculate(s_Arm.getWristEncoder(), setpoint) * -1;
     //s_Arm.moveWrist(speed);
     s_Arm.wristPIDCommand(wristSetpoint);
     s_Arm.elbowPIDCommand(elbowSetpoint);
+    s_Arm.extensionPID(extensionSetpoint);
+    s_Arm.shoulderPIDCommand(shoulderSetpoint);
    }
 
    @Override
