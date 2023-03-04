@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,10 +23,12 @@ public class ArmSubsystem extends SubsystemBase {
     private final PIDController shoulderPID = new PIDController(0, 0, 0);
     private final PIDController elbowPID = new PIDController(0, 0, 0);
     private final PIDController wristPID = new PIDController(0, 0, 0);
+    private final PIDController extensionPID = new PIDController(0, 0, 0);
 
     private final AnalogEncoder shoulderEncoder = new AnalogEncoder(0);
     private final AnalogEncoder elbowEncoder = new AnalogEncoder(1);
     private final AnalogEncoder wristEncoder = new AnalogEncoder(2);
+
 
     private final ArmFeedforward shoulderFeedforward = new ArmFeedforward(0, 0, 0);
     private final ArmFeedforward elbowFeedforward = new ArmFeedforward(0, 0, 0);
@@ -39,6 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMasterMotor.restoreFactoryDefaults();
         armSlaveMotor.restoreFactoryDefaults();
         armSlaveMotor.follow(armMasterMotor, true);
+        extensionMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
 
     @Override
@@ -46,6 +50,11 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shoulder Encoder Value", shoulderEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Elbow Encoder Value", elbowEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Wrist Encoder Value", wristEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Elbow Extension Encoder Value", extensionMotor.getSelectedSensorPosition());
+        boolean limitSwitch = 1 == extensionMotor.isRevLimitSwitchClosed();
+        if (limitSwitch) {
+            extensionMotor.setSelectedSensorPosition(0);
+        }
     }
 
     //Moves arm motors at a tenth of the input speed
@@ -68,6 +77,22 @@ public class ArmSubsystem extends SubsystemBase {
         extensionMotor.set(ControlMode.PercentOutput, speed);
     }
 
+    public double getShoulderEncoder() {
+        return shoulderEncoder.getAbsolutePosition();
+    }
+
+    public double getElbowEncoder() {
+        return elbowEncoder.getAbsolutePosition();
+    }
+
+    public double getWristEncoder() {
+        return wristEncoder.getAbsolutePosition();
+    }
+
+    public double getExtensionEncoder() {
+        return extensionMotor.getSelectedSensorPosition();
+    }
+
     /*
      * Moves shoulder motors to an input setoint with PID method
      * PID values determined from Smartdashboard for testing
@@ -82,8 +107,10 @@ public class ArmSubsystem extends SubsystemBase {
      * PID values determined from Smartdashboard for testing
      */
     public void elbowPIDCommand(double setpoint/*, double feedbackSetpoint*/) {
-        elbowPID.setPID(SmartDashboard.getNumber("Elbow P Value", 0), SmartDashboard.getNumber("Elbow I Value", 0), SmartDashboard.getNumber("Elbow D Value", 0));
-        elbowMotor.set(ControlMode.PercentOutput, elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint) /*+ elbowFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        elbowPID.setPID(SmartDashboard.getNumber("Elbow P Value", 10), SmartDashboard.getNumber("Elbow I Value", 0), SmartDashboard.getNumber("Elbow D Value", 0));
+        elbowMotor.set(ControlMode.PercentOutput, elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint)) /*+ elbowFeedforward.calculate(feedbackSetpoint, setpoint)*/;
+        SmartDashboard.putNumber("Elbow Speed", elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint));
+        SmartDashboard.putString("Elbow Run", "It Ran");
     }
 
     /*
@@ -91,7 +118,21 @@ public class ArmSubsystem extends SubsystemBase {
      * PID values determined from Smartdashboard for testing
      */
     public void wristPIDCommand(double setpoint/*, double feedbackSetpoint*/) {
-        wristPID.setPID(SmartDashboard.getNumber("Wrist P Value", 0), SmartDashboard.getNumber("Wrist I Value", 0), SmartDashboard.getNumber("Wrist D Value", 0));
-        wristMotor.set(ControlMode.PercentOutput, wristPID.calculate(wristEncoder.getAbsolutePosition(), setpoint) /*+ wristFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        wristPID.setPID(SmartDashboard.getNumber("Wrist P Value", 5.5), SmartDashboard.getNumber("Wrist I Value", 0), SmartDashboard.getNumber("Wrist D Value", 0));
+        wristMotor.set(ControlMode.PercentOutput, (wristPID.calculate(wristEncoder.getAbsolutePosition(), setpoint) * -1) /*+ wristFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        SmartDashboard.putNumber("Wrist Speed", wristMotor.getMotorOutputPercent());
+    }
+
+    /*
+     * Moves elbow extension motor to an input setpoint with PID method
+     * PID values determined from Smartdashboard for testing
+     */
+    public void extensionPID(double setpoint) {
+        extensionPID.setPID(SmartDashboard.getNumber("Extension P Value", 0), SmartDashboard.getNumber("Extension I Value", 0), SmartDashboard.getNumber("Extension D Value", 0));
+        extensionMotor.set(ControlMode.PercentOutput, extensionPID.calculate(extensionMotor.getSelectedSensorPosition(), setpoint));
+    }
+
+    public void zeroExtensionEncoder() {
+        extensionMotor.setSelectedSensorPosition(0);
     }
 }

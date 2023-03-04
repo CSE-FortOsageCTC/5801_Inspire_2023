@@ -30,15 +30,18 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+<<<<<<< HEAD
   private final JoystickButton intakeInDriver = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
   private final JoystickButton intakeOutDriver = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton autoAlign = new JoystickButton(driver, XboxController.Button.kX.value);
+=======
+>>>>>>> 814859f (updated arm and intake)
 
   /* Operator Buttons */
   private final JoystickButton leftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton rightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton intakeInOp = new JoystickButton(operator, XboxController.Axis.kRightTrigger.value);
-  private final JoystickButton intakeOutOp = new JoystickButton(operator, XboxController.Axis.kLeftTrigger.value);
+  private final JoystickButton xButton = new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton yButton = new JoystickButton(operator, XboxController.Button.kY.value);
 
   /* D-Pad POV Driver */
   POVButton dpadUpDriver = new POVButton(driver, 0);
@@ -55,7 +58,7 @@ public class RobotContainer {
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   private final LEDSubsystem s_LEDSubsystem = new LEDSubsystem();
-  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  private final IntakeSubsystem s_IntakeSubsystem = new IntakeSubsystem();
   private final ArmSubsystem s_ArmSubsystem = new ArmSubsystem();
 
   /* Variables */
@@ -67,6 +70,7 @@ public class RobotContainer {
     boolean openLoop = true;
     s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop, throttle));
     s_ArmSubsystem.setDefaultCommand(new TeleopArm(s_ArmSubsystem, operator));
+    s_IntakeSubsystem.setDefaultCommand(new IntakeCommand(s_IntakeSubsystem, operator));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -77,13 +81,17 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
     rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
+<<<<<<< HEAD
     intakeInDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, 0.3));
     intakeOutDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, -0.3));
     autoAlign.onTrue(new AutoAlign(s_Swerve, isCone));
+=======
+>>>>>>> 814859f (updated arm and intake)
 
     /* Operator Buttons */
-    intakeInOp.whileTrue(new IntakeCommand(m_IntakeSubsystem, 0.3));
-    intakeOutOp.whileTrue(new IntakeCommand(m_IntakeSubsystem, -0.3));
+    xButton.whileTrue(new PositionArm(s_ArmSubsystem));
+    yButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.zeroExtensionEncoder()));
+    
 
     /* D-Pad Driver Input Detection */
     dpadUpDriver.onTrue(dPadPOV(0));
