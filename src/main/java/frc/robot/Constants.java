@@ -1,5 +1,9 @@
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -134,7 +138,73 @@ public final class Constants {
         public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
-    
+
+        /*
+         * Representation of the different positions the arm can be set to
+         */
+        public enum ArmPosition {
+            Default(0.183, 0.618, 0, 0.325),
+            Floor(0.277, 0.979, -61222, 0.734),
+            Mid(0.296, 0.739, -2257, 0.616),
+            High(0.342, 0.641, -53732, 0.629);
+            /*
+             * Representation of the motors that make up the arm
+             */
+            public enum ArmMotor {
+                Shoulder,
+                Elbow,
+                Extension,
+                Wrist;
+            }
+            /*
+             * A map of the setpoints for the motors in the given arm position
+             */
+            private Map<ArmMotor, Double> setpoints;
+            /**
+             * Constructor for armposition enum
+             * @param shoulderSetpoint Setpoint for the shoulder motor
+             * @param elbowSetpoint Setpoint for the elbow motor
+             * @param extensionSetpoint Setpoint for the shoulder extension motor
+             * @param wristSetpoint Setpoint for the wrist motor
+             */
+            ArmPosition(double shoulderSetpoint, double elbowSetpoint, double extensionSetpoint, double wristSetpoint) {
+                setpoints = new HashMap<>();
+                setpoints.put(ArmMotor.Shoulder, shoulderSetpoint);
+                setpoints.put(ArmMotor.Elbow, elbowSetpoint);
+                setpoints.put(ArmMotor.Extension, extensionSetpoint);
+                setpoints.put(ArmMotor.Wrist, wristSetpoint);
+            }
+            /**
+             * Gets the setpoint for the given motor
+             * @param armMotor Motor to get setpoint from
+             * @return Setpoint
+             * 
+             */
+            public double getSetpoint(ArmMotor armMotor) {
+                return setpoints.get(armMotor);
+            }
+        }
+
+        //PID constants for wrist motor
+        public static final double wristP = 0;
+        public static final double wristI = 0;
+        public static final double wristD = 0;
+
+        //PID constants for elbow motor
+        public static final double elbowP = 0;
+        public static final double elbowI = 0;
+        public static final double elbowD = 0;
+
+        //PID constants for elbow extension motor
+        public static final double extensionP = 0;
+        public static final double extensionI = 0;
+        public static final double extensionD = 0;
+
+        //PID constants for shoulder motor
+        public static final double shoulderP = 0;
+        public static final double shoulderI = 0;
+        public static final double shoulderD = 0;
+
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(

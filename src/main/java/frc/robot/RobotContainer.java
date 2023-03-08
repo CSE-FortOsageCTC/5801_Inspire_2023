@@ -12,7 +12,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+<<<<<<< HEAD
 
+=======
+import frc.robot.Constants.AutoConstants.ArmPosition;
+import frc.robot.Constants.AutoConstants.ArmPosition.ArmMotor;
+import frc.robot.autos.*;
+>>>>>>> 7442129 (PositionArm updates and created constants)
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -42,6 +48,8 @@ public class RobotContainer {
   private final JoystickButton rightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton xButton = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton yButton = new JoystickButton(operator, XboxController.Button.kY.value);
+  private final JoystickButton aButton = new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton bButton = new JoystickButton(operator, XboxController.Button.kB.value);
 
   /* D-Pad POV Driver */
   POVButton dpadUpDriver = new POVButton(driver, 0);
@@ -89,9 +97,10 @@ public class RobotContainer {
 >>>>>>> 814859f (updated arm and intake)
 
     /* Operator Buttons */
-    xButton.whileTrue(new PositionArm(s_ArmSubsystem));
-    yButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.zeroExtensionEncoder()));
-    
+    xButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Mid));
+    yButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.High));
+    aButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Floor));
+    bButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Default));
 
     /* D-Pad Driver Input Detection */
     dpadUpDriver.onTrue(dPadPOV(0));

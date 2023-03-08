@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,7 +52,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Elbow Encoder Value", elbowEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Wrist Encoder Value", wristEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Elbow Extension Encoder Value", extensionMotor.getSelectedSensorPosition());
-        boolean limitSwitch = 1 == extensionMotor.isRevLimitSwitchClosed();
+        boolean limitSwitch = 1 == extensionMotor.isFwdLimitSwitchClosed();
         if (limitSwitch) {
             extensionMotor.setSelectedSensorPosition(0);
         }
@@ -97,8 +98,9 @@ public class ArmSubsystem extends SubsystemBase {
      * Moves shoulder motors to an input setoint with PID method
      * PID values determined from Smartdashboard for testing
      */
-    public void shoulderPIDCommand(double setpoint/*, double feedbackSetpoint*/) {
+    public void shoulderPID(double setpoint/*, double feedbackSetpoint*/) {
         shoulderPID.setPID(SmartDashboard.getNumber("Shoulder P Value", 0), SmartDashboard.getNumber("Shoulder I Value", 0), SmartDashboard.getNumber("Shoulder D Value", 0));
+        //shoulderPID.setPID(Constants.AutoConstants.shoulderP, Constants.AutoConstants.shoulderI, Constants.AutoConstants.shoulderD);
         armMasterMotor.set(shoulderPID.calculate(shoulderEncoder.getAbsolutePosition(), setpoint) /*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
     }
 
@@ -106,8 +108,9 @@ public class ArmSubsystem extends SubsystemBase {
      * Moves elbow motor to an input setpoint with PID method
      * PID values determined from Smartdashboard for testing
      */
-    public void elbowPIDCommand(double setpoint/*, double feedbackSetpoint*/) {
+    public void elbowPID(double setpoint/*, double feedbackSetpoint*/) {
         elbowPID.setPID(SmartDashboard.getNumber("Elbow P Value", 10), SmartDashboard.getNumber("Elbow I Value", 0), SmartDashboard.getNumber("Elbow D Value", 0));
+        //elbowPID.setPID(Constants.AutoConstants.elbowP, Constants.AutoConstants.elbowI, Constants.AutoConstants.elbowD);
         elbowMotor.set(ControlMode.PercentOutput, elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint)) /*+ elbowFeedforward.calculate(feedbackSetpoint, setpoint)*/;
         SmartDashboard.putNumber("Elbow Speed", elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint));
         SmartDashboard.putString("Elbow Run", "It Ran");
@@ -117,8 +120,9 @@ public class ArmSubsystem extends SubsystemBase {
      * Moves elbow motor to an input setpoint with PID method
      * PID values determined from Smartdashboard for testing
      */
-    public void wristPIDCommand(double setpoint/*, double feedbackSetpoint*/) {
+    public void wristPID(double setpoint/*, double feedbackSetpoint*/) {
         wristPID.setPID(SmartDashboard.getNumber("Wrist P Value", 5.5), SmartDashboard.getNumber("Wrist I Value", 0), SmartDashboard.getNumber("Wrist D Value", 0));
+        //wristPID.setPID(Constants.AutoConstants.wristP, Constants.AutoConstants.wristI, Constants.AutoConstants.wristD);
         wristMotor.set(ControlMode.PercentOutput, (wristPID.calculate(wristEncoder.getAbsolutePosition(), setpoint) * -1) /*+ wristFeedforward.calculate(feedbackSetpoint, setpoint)*/);
         SmartDashboard.putNumber("Wrist Speed", wristMotor.getMotorOutputPercent());
     }
@@ -129,6 +133,7 @@ public class ArmSubsystem extends SubsystemBase {
      */
     public void extensionPID(double setpoint) {
         extensionPID.setPID(SmartDashboard.getNumber("Extension P Value", 0), SmartDashboard.getNumber("Extension I Value", 0), SmartDashboard.getNumber("Extension D Value", 0));
+        //extensionPID.setPID(Constants.AutoConstants.extensionP, Constants.AutoConstants.extensionI, Constants.AutoConstants.extensionD);
         extensionMotor.set(ControlMode.PercentOutput, extensionPID.calculate(extensionMotor.getSelectedSensorPosition(), setpoint));
     }
 
