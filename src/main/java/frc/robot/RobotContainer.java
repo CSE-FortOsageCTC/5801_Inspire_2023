@@ -12,13 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-<<<<<<< HEAD
 
-=======
 import frc.robot.Constants.AutoConstants.ArmPosition;
 import frc.robot.Constants.AutoConstants.ArmPosition.ArmMotor;
-import frc.robot.autos.*;
->>>>>>> 7442129 (PositionArm updates and created constants)
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -36,12 +32,7 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-<<<<<<< HEAD
-  private final JoystickButton intakeInDriver = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
-  private final JoystickButton intakeOutDriver = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton autoAlign = new JoystickButton(driver, XboxController.Button.kX.value);
-=======
->>>>>>> 814859f (updated arm and intake)
 
   /* Operator Buttons */
   private final JoystickButton leftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
@@ -89,12 +80,7 @@ public class RobotContainer {
     zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
     leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
     rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
-<<<<<<< HEAD
-    intakeInDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, 0.3));
-    intakeOutDriver.whileTrue(new IntakeCommand(m_IntakeSubsystem, -0.3));
     autoAlign.onTrue(new AutoAlign(s_Swerve, isCone));
-=======
->>>>>>> 814859f (updated arm and intake)
 
     /* Operator Buttons */
     xButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Mid));
