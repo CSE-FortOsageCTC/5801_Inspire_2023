@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -83,16 +84,16 @@ public class RobotContainer {
     intakeOutOp.whileTrue(new IntakeCommand(m_IntakeSubsystem, -0.3));
 
     /* D-Pad Driver Input Detection */
-    dpadUpDriver.onTrue(new InstantCommand(() -> dPadPOV(0)));
-    dpadRightDriver.onTrue(new InstantCommand(() -> dPadPOV(90)));
-    dpadDownDriver.onTrue(new InstantCommand(() -> dPadPOV(180)));
-    dpadLeftDriver.onTrue(new InstantCommand(() -> dPadPOV(270)));
+    dpadUpDriver.onTrue(dPadPOV(0));
+    dpadRightDriver.onTrue(dPadPOV(90));
+    dpadDownDriver.onTrue(dPadPOV(180));
+    dpadLeftDriver.onTrue(dPadPOV(270));
 
     /* D-Pad Operator Input Detection */
-    dpadUpOp.onTrue(new InstantCommand(() -> dPadPOV(0)));
-    dpadRightOp.onTrue(new InstantCommand(() -> dPadPOV(90)));
-    dpadDownOp.onTrue(new InstantCommand(() -> dPadPOV(180)));
-    dpadLeftOp.onTrue(new InstantCommand(() -> dPadPOV(270)));
+    dpadUpOp.onTrue((dPadPOV(0)));
+    dpadRightOp.onTrue((dPadPOV(90)));
+    dpadDownOp.onTrue((dPadPOV(180)));
+    dpadLeftOp.onTrue(dPadPOV(270));
   }
 
   public Command getAutonomousCommand() {
@@ -100,12 +101,13 @@ public class RobotContainer {
   }
 
   /* Outputs D-Pad POV Value In Dashboard */
-  public void dPadPOV (int angle) {
-
-    new RotateToHeading(s_Swerve, angle);
+  public CommandBase dPadPOV (int angle) {
 
     System.out.println("D-Pad Angle is " + angle);
     SmartDashboard.putNumber("Angle", angle);
+  
+    return new RotateToHeading(s_Swerve, angle);
+
   }
 
   public void setIsCone() {

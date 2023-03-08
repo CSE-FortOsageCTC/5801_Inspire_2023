@@ -54,7 +54,7 @@ public class TeleopSwerve extends CommandBase {
         yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
         xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
         rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
-        throttleAxis = (Math.abs(throttleAxis) < Constants.stickDeadband) ? 0 : throttleAxis;
+        throttleAxis = (Math.abs(throttleAxis) < Constants.stickDeadband) ? .11 : throttleAxis;
 
         translation = new Translation2d(yAxis, xAxis).times(throttleLimiter.calculate(throttleAxis) * (Constants.Swerve.maxSpeed));
         rotation = rotationLimiter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity;
