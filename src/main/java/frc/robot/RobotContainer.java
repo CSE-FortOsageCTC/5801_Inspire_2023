@@ -58,7 +58,7 @@ public class RobotContainer {
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
 
   /* Variables */
-  public static boolean isCone = false;
+  public static boolean isCone = true;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
