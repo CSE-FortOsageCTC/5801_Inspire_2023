@@ -1,7 +1,12 @@
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -88,7 +93,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 12;
-            public static final double angleOffset = 112.587;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(112.587);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -98,7 +103,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 14;
-            public static final double angleOffset = 188.349;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(188.349);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -108,7 +113,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 16;
-            public static final double angleOffset = 179.736;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(179.736);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -118,7 +123,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 18;
-            public static final double angleOffset = 143.613;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(143.613);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -134,7 +139,73 @@ public final class Constants {
         public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
-    
+
+        /*
+         * Representation of the different positions the arm can be set to
+         */
+        public enum ArmPosition {
+            Default(0.191, 0.625, -400, 0.276),
+            Floor(0.270, 0.988, -60000, 0.761),
+            Mid(0.307, 0.746, -4192, 0.603),
+            High(0.320, 0.668, -68422, 0.622);
+            /*
+             * Representation of the motors that make up the arm
+             */
+            public enum ArmMotor {
+                Shoulder,
+                Elbow,
+                Extension,
+                Wrist;
+            }
+            /*
+             * A map of the setpoints for the motors in the given arm position
+             */
+            private Map<ArmMotor, Double> setpoints;
+            /**
+             * Constructor for armposition enum
+             * @param shoulderSetpoint Setpoint for the shoulder motor
+             * @param elbowSetpoint Setpoint for the elbow motor
+             * @param extensionSetpoint Setpoint for the shoulder extension motor
+             * @param wristSetpoint Setpoint for the wrist motor
+             */
+            ArmPosition(double shoulderSetpoint, double elbowSetpoint, double extensionSetpoint, double wristSetpoint) {
+                setpoints = new HashMap<>();
+                setpoints.put(ArmMotor.Shoulder, shoulderSetpoint);
+                setpoints.put(ArmMotor.Elbow, elbowSetpoint);
+                setpoints.put(ArmMotor.Extension, extensionSetpoint);
+                setpoints.put(ArmMotor.Wrist, wristSetpoint);
+            }
+            /**
+             * Gets the setpoint for the given motor
+             * @param armMotor Motor to get setpoint from
+             * @return Setpoint
+             * 
+             */
+            public double getSetpoint(ArmMotor armMotor) {
+                return setpoints.get(armMotor);
+            }
+        }
+
+        //PID constants for wrist motor
+        public static final double wristP = 6;
+        public static final double wristI = 0;
+        public static final double wristD = 0;
+
+        //PID constants for elbow motor
+        public static final double elbowP = 4.5;
+        public static final double elbowI = 0;
+        public static final double elbowD = 0;
+
+        //PID constants for elbow extension motor
+        public static final double extensionP = 0.0005;
+        public static final double extensionI = 0.0001;
+        public static final double extensionD = 0;
+
+        //PID constants for shoulder motor
+        public static final double shoulderP = 3.5;
+        public static final double shoulderI = 0;
+        public static final double shoulderD = 0;
+
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
