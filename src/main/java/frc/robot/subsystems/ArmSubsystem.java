@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,7 +10,9 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,7 +20,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     private final CANSparkMax armMasterMotor = new CANSparkMax(9, MotorType.kBrushless);
     private final CANSparkMax armSlaveMotor = new CANSparkMax(11, MotorType.kBrushless);
-    private final TalonSRX elbowMotor = new TalonSRX(13);
+    private final TalonSRX elbowMasterMotor = new TalonSRX(13);
+    private final VictorSPX elbowSlaveMotor = new VictorSPX(19);
     private final TalonSRX wristMotor = new TalonSRX(23);
     private final TalonSRX extensionMotor = new TalonSRX(22);
 
@@ -43,7 +47,15 @@ public class ArmSubsystem extends SubsystemBase {
         armMasterMotor.restoreFactoryDefaults();
         armSlaveMotor.restoreFactoryDefaults();
         armSlaveMotor.follow(armMasterMotor, true);
+        
         extensionMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+        extensionMotor.setNeutralMode(NeutralMode.Brake);
+
+        elbowMasterMotor.setNeutralMode(NeutralMode.Brake);
+        elbowMasterMotor.setInverted(true);
+        elbowSlaveMotor.follow(elbowMasterMotor);
+        elbowSlaveMotor.setNeutralMode(NeutralMode.Brake);
+        elbowSlaveMotor.setInverted(true);
     }
 
     @Override
@@ -65,7 +77,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     //Moves elbow motor
     public void moveElbow(double speed) {
-        elbowMotor.set(ControlMode.PercentOutput, speed);
+        elbowMasterMotor.set(ControlMode.PercentOutput, speed);
     }
 
     //Moves wrist motor
@@ -101,7 +113,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void shoulderPID(double setpoint/*, double feedbackSetpoint*/) {
         shoulderPID.setPID(SmartDashboard.getNumber("Shoulder P Value", 0), SmartDashboard.getNumber("Shoulder I Value", 0), SmartDashboard.getNumber("Shoulder D Value", 0));
         //shoulderPID.setPID(Constants.AutoConstants.shoulderP, Constants.AutoConstants.shoulderI, Constants.AutoConstants.shoulderD);
-        armMasterMotor.set(shoulderPID.calculate(shoulderEncoder.getAbsolutePosition(), setpoint) /*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        armMasterMotor.set((shoulderPID.calculate(shoulderEncoder.getAbsolutePosition(), setpoint)) * -1 /*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
     }
 
     /*
@@ -111,7 +123,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void elbowPID(double setpoint/*, double feedbackSetpoint*/) {
         elbowPID.setPID(SmartDashboard.getNumber("Elbow P Value", 10), SmartDashboard.getNumber("Elbow I Value", 0), SmartDashboard.getNumber("Elbow D Value", 0));
         //elbowPID.setPID(Constants.AutoConstants.elbowP, Constants.AutoConstants.elbowI, Constants.AutoConstants.elbowD);
-        elbowMotor.set(ControlMode.PercentOutput, elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint)) /*+ elbowFeedforward.calculate(feedbackSetpoint, setpoint)*/;
+        double speed = elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint);
+        speed = MathUtil.clamp(speed, -0.5, 0.5);
+        elbowMasterMotor.set(ControlMode.PercentOutput, speed) /*+ elbowFeedforward.calculate(feedbackSetpoint, setpoint)*/;
         SmartDashboard.putNumber("Elbow Speed", elbowPID.calculate(elbowEncoder.getAbsolutePosition(), setpoint));
         SmartDashboard.putString("Elbow Run", "It Ran");
     }

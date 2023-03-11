@@ -143,10 +143,10 @@ public final class Constants {
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0.183, 0.618, 0, 0.325),
-            Floor(0.277, 0.979, -61222, 0.734),
-            Mid(0.296, 0.739, -2257, 0.616),
-            High(0.342, 0.641, -53732, 0.629);
+            Default(0.191, 0.625, -400, 0.276),
+            Floor(0.270, 0.988, -60000, 0.761),
+            Mid(0.307, 0.746, -4192, 0.603),
+            High(0.320, 0.668, -68422, 0.622);
             /*
              * Representation of the motors that make up the arm
              */
@@ -186,22 +186,22 @@ public final class Constants {
         }
 
         //PID constants for wrist motor
-        public static final double wristP = 0;
+        public static final double wristP = 6;
         public static final double wristI = 0;
         public static final double wristD = 0;
 
         //PID constants for elbow motor
-        public static final double elbowP = 0;
+        public static final double elbowP = 4.5;
         public static final double elbowI = 0;
         public static final double elbowD = 0;
 
         //PID constants for elbow extension motor
-        public static final double extensionP = 0;
-        public static final double extensionI = 0;
+        public static final double extensionP = 0.0005;
+        public static final double extensionI = 0.0001;
         public static final double extensionD = 0;
 
         //PID constants for shoulder motor
-        public static final double shoulderP = 0;
+        public static final double shoulderP = 3.5;
         public static final double shoulderI = 0;
         public static final double shoulderD = 0;
 
