@@ -21,6 +21,7 @@ public class AutoAlign extends CommandBase {
     private Swerve s_Swerve;
     private Limelight limelight;
     private AutoRotateUtil autoUtil;
+    private boolean isCone;
 
     /**
      * Constructer for AutoAlign
@@ -30,8 +31,9 @@ public class AutoAlign extends CommandBase {
     public AutoAlign(Swerve s_Swerve, boolean isCone) {
         limelight = new Limelight(isCone);
         this.s_Swerve = s_Swerve;
-        this.autoUtil = new AutoRotateUtil(s_Swerve, 0);
+        this.autoUtil = new AutoRotateUtil(s_Swerve, 180);
         addRequirements(s_Swerve);
+        this.isCone = isCone;
 
         // creating yTranslationPidController and setting the toleance and setpoint
         yTranslationPidController = new PIDController(0, 0, 0);
@@ -82,26 +84,32 @@ public class AutoAlign extends CommandBase {
         double xValue = limelight.getX(); //gets the limelight X Coordinate
         double areaValue = limelight.getArea(); // gets the area percentage from the limelight
         double angularValue = limelight.getSkew();
+        
 
         SmartDashboard.putNumber("Xvalue", xValue);
         SmartDashboard.putNumber("Areavalue", areaValue);
         SmartDashboard.putNumber("AngularValue", angularValue);
-        SmartDashboard.putNumber("Ts0", limelight.getSkew0());
-        SmartDashboard.putNumber("Ts1", limelight.getSkew1());
-        SmartDashboard.putNumber("Ts2", limelight.getSkew2());
+        SmartDashboard.putNumber("AutoAlignSetpoint", xTranslationPidController.getSetpoint());
+        //SmartDashboard.putNumber("Ts0", limelight.getSkew0());
+        //SmartDashboard.putNumber("Ts1", limelight.getSkew1());
+        //SmartDashboard.putNumber("Ts2", limelight.getSkew2());
 
 
         // Calculates the x and y speed values for the translation movement
         double ySpeed = yTranslationPidController.calculate(xValue);
         double xSpeed = xTranslationPidController.calculate(areaValue);
-        double angularSpeed = autoUtil.calculateRotationSpeed() * Constants.Swerve.maxAngularVelocity;
+        double angularSpeed =autoUtil.isFinished() ? 0: autoUtil.calculateRotationSpeed() * Constants.Swerve.maxAngularVelocity;
         
 
         // moves the swerve subsystem
-        Translation2d translation = new Translation2d(xSpeed, ySpeed).times(Constants.Swerve.maxSpeed);
+        Translation2d translation = new Translation2d(-xSpeed, -ySpeed).times(Constants.Swerve.maxSpeed);
         double rotation = angularSpeed * Constants.Swerve.maxAngularVelocity;
         s_Swerve.drive(translation, rotation, true, true);
 
+    }
+
+    public void updateIsCone(boolean isCone) {
+        this.isCone = isCone;
     }
 
     @Override

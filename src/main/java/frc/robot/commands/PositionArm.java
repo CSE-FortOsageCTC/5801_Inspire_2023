@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -27,7 +26,6 @@ public class PositionArm extends CommandBase{
         elbowSetpoint = position.getSetpoint(ArmMotor.Elbow);
         extensionSetpoint = position.getSetpoint(ArmMotor.Extension);
         shoulderSetpoint = position.getSetpoint(ArmMotor.Shoulder);
-
         
         //SmartDashboard.putNumber("Wrist Setpoint", 0.48);
         SmartDashboard.putNumber("Wrist P Value", Constants.AutoConstants.wristP);
@@ -53,6 +51,7 @@ public class PositionArm extends CommandBase{
 
    @Override
    public void initialize() {
+
    }
 
    @Override
@@ -63,23 +62,29 @@ public class PositionArm extends CommandBase{
     //double extensionSetpoint = SmartDashboard.getNumber("Extension Setpoint", 0);
     //double shoulderSetpoint = SmartDashboard.getNumber("Shoulder Setpoint", 0);
 
-
+    s_Arm.setSetpoints(wristSetpoint, shoulderSetpoint, elbowSetpoint, extensionSetpoint);
 
     //double speed = pidController.calculate(s_Arm.getWristEncoder(), setpoint) * -1;
     //s_Arm.moveWrist(speed);
-    s_Arm.wristPID(wristSetpoint);
-    s_Arm.elbowPID(elbowSetpoint);
-    s_Arm.extensionPID(extensionSetpoint);
-    s_Arm.shoulderPID(shoulderSetpoint);
+    s_Arm.wristPID();
+    s_Arm.elbowPID();
+    s_Arm.extensionPID();
+    s_Arm.shoulderPID();
    }
 
    @Override
    public boolean isFinished () {
     //return pidController.atSetpoint();
-    return false;
+    return s_Arm.isFinished();
    }
 
    @Override
    public void end (boolean interupted) {
+    System.out.println("yep it sure did end before");
+    s_Arm.moveElbow(0);
+    s_Arm.moveShoulder(0);
+    s_Arm.moveWrist(0);
+    s_Arm.extendElbow(0);
+    System.out.println("yep it sure did end...");
    }
 }

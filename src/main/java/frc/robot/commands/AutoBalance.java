@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.SwerveModule;
@@ -32,10 +31,10 @@ public class AutoBalance extends CommandBase {
     @Override 
     public void execute(){        
         pitchAngleDegrees = s_Swerve.getPitch();
-        SmartDashboard.putBoolean("auto", true);
-        SmartDashboard.putNumber("Gyro Pitch", s_Swerve.getPitch());//displaying pitch value in degrees on dashboard
-        SmartDashboard.putNumber("yAxisRate", yAxisRate);
-        SmartDashboard.putNumber("AngleDegrees", pitchAngleDegrees);
+        //SmartDashboard.putBoolean("auto", true);
+        //SmartDashboard.putNumber("Gyro Pitch", s_Swerve.getPitch());//displaying pitch value in degrees on dashboard
+        //SmartDashboard.putNumber("yAxisRate", yAxisRate);
+        //SmartDashboard.putNumber("AngleDegrees", pitchAngleDegrees);
 
         double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
         yAxisRate = Math.sin(pitchAngleRadians) * -1;

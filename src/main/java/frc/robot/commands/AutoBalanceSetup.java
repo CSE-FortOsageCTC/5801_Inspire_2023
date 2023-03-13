@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.MathUsageId;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -34,28 +35,31 @@ public class AutoBalanceSetup extends CommandBase {
             gyro.configFactoryDefault();
     }
 
-    public boolean getPitch() { // getting pitch
+    public double getPitch() { // getting pitch
         pitchAngleDegrees = gyro.getPitch();
-        return (Constants.Swerve.invertGyro);
+        return pitchAngleDegrees;
+
+    }
+    @Override
+    public boolean isFinished() {
+        return Math.abs(getPitch()) > 10;
+        // TODO Auto-generated method stub
 
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        // TODO Auto-generated method stub
+        translation = new Translation2d(0, 0);
+                s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
+    }
     @Override 
     public void execute(){        
-        getPitch();
+        
         SmartDashboard.putBoolean("auto", true);//verifies if code actually runs
-        SmartDashboard.putNumber("AngleDegrees", pitchAngleDegrees);////displaying pitch value in degrees on dashboard
-
-        while (pitchAngleDegrees < 20) {
-
-        }
-        try {
-            translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed/1.5);
-            s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
-        } catch( RuntimeException ex ) {
-            String err_string = "Drive system error:  " + ex.getMessage();
-            DriverStation.reportError(err_string, true);
-        }
+////displaying pitch value in degrees on dashboard
+        translation = new Translation2d(-1, 0).times(Constants.Swerve.maxSpeed * 0.33);
+                s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);	
     }
 }

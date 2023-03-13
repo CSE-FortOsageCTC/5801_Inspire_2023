@@ -1,7 +1,6 @@
 package frc.robot;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -18,7 +17,7 @@ public final class Constants {
         
     
     public static final double coneLimelightAreaSetpoint = .2;
-    public static final double cubeLimelightAreaSetpoint = 10;
+    public static final double cubeLimelightAreaSetpoint = 7;
     public static final int conePipeline = 1;
     public static final int cubePipeline = 2;
 
@@ -145,9 +144,9 @@ public final class Constants {
          */
         public enum ArmPosition {
             Default(0.191, 0.625, -400, 0.276),
-            Floor(0.270, 0.988, -60000, 0.761),
-            Mid(0.307, 0.746, -4192, 0.603),
-            High(0.320, 0.668, -68422, 0.622);
+            Floor(0.270, 0.988, -67000, 0.721),
+            Mid(0.307, 0.685, -4192, 0.567),
+            High(0.335, 0.648, -68422, 0.622);
             /*
              * Representation of the motors that make up the arm
              */

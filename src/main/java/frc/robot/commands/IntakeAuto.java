@@ -21,6 +21,5 @@ public class IntakeAuto extends CommandBase {
     @Override
     public void execute(){
         m_IntakeSubsystem.moveIntake(speed);
-        System.out.println("yes");
     }
 }

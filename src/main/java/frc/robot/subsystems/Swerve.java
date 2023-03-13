@@ -111,8 +111,16 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
     }
 
+    public void gyro180() {
+        gyro.setYaw(180);
+    }
+
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+
+    public double getYawDouble() {
+        return gyro.getYaw();
     }
 
     public void resetModulesToAbsolute(){
@@ -122,9 +130,13 @@ public class Swerve extends SubsystemBase {
     }
 
     public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory path1, boolean isFirstPath) {
-        PIDController thetaController = new PIDController(.1, 0, 0);
-        PIDController xController = new PIDController(.1, 0, 0);
-        PIDController yController = new PIDController(.1, 0, 0);
+        PIDController thetaController = new PIDController(0, 0, 0);
+        PIDController xController = new PIDController(0, 0, 0);
+        PIDController yController = new PIDController(0, 0, 0);
+
+        SmartDashboard.putNumber("ThetaP", thetaController.getP());
+        SmartDashboard.putNumber("ThetaI", thetaController.getI());
+        SmartDashboard.putNumber("ThetaD", thetaController.getD());
     
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
     
@@ -144,7 +156,7 @@ public class Swerve extends SubsystemBase {
                  yController, // Y controller (usually the same values as X controller)
                  thetaController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  this::setModuleStates,  // Module states consumer
-                 true, //Automatic mirroring
+                 false, //Automatic mirroring
                  this // Requires this drive subsystem
              ) 
              .andThen(() -> stopDrive())
@@ -158,11 +170,13 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  
-
-        for(SwerveModule mod : mSwerveMods){
+        double yaw = ((gyro.getYaw() % 360) + 360) % 360;
+        SmartDashboard.putNumber("Gyro Yaw Degrees", yaw);
+        SmartDashboard.putNumber("AngleDegrees", gyro.getPitch());
+        /*for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
-        }
+        }*/
     }
 }
