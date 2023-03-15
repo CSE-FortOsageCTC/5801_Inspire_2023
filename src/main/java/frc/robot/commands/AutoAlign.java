@@ -98,7 +98,7 @@ public class AutoAlign extends CommandBase {
         // Calculates the x and y speed values for the translation movement
         double ySpeed = yTranslationPidController.calculate(xValue);
         double xSpeed = xTranslationPidController.calculate(areaValue);
-        double angularSpeed =autoUtil.isFinished() ? 0: autoUtil.calculateRotationSpeed() * Constants.Swerve.maxAngularVelocity;
+        double angularSpeed =autoUtil.calculateRotationSpeed();//autoUtil.isFinished() ? 0: autoUtil.calculateRotationSpeed() * Constants.Swerve.maxAngularVelocity;
         
 
         // moves the swerve subsystem

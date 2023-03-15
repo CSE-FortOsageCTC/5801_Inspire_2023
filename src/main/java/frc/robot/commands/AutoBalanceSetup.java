@@ -19,7 +19,7 @@ public class AutoBalanceSetup extends CommandBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
-    public double pitchAngleDegrees;
+    public double rollAngleDegrees;
     private Swerve s_Swerve;
     private Translation2d translation;
     private boolean fieldRelative;
@@ -35,18 +35,12 @@ public class AutoBalanceSetup extends CommandBase {
             gyro.configFactoryDefault();
     }
 
-    public double getPitch() { // getting pitch
-        pitchAngleDegrees = gyro.getPitch();
-        return pitchAngleDegrees;
+    public double getRoll() { // getting pitch
+        rollAngleDegrees = gyro.getRoll();
+        return rollAngleDegrees;
 
     }
-    @Override
-    public boolean isFinished() {
-        return Math.abs(getPitch()) > 10;
-        // TODO Auto-generated method stub
-
-    }
-
+    
     @Override
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub

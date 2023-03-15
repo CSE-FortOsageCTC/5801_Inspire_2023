@@ -143,10 +143,11 @@ public final class Constants {
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0.191, 0.625, -400, 0.276),
-            Floor(0.270, 0.988, -67000, 0.721),
-            Mid(0.307, 0.685, -4192, 0.567),
-            High(0.335, 0.648, -68422, 0.622);
+            Default(0.191, 0.62, -400, 0.276),
+            Floor(0.270, 0.988, -67000, 0.675),
+            Mid(0.307, 0.696, -2698, 0.486), //0.307, 0.685, -4192, 0.567
+            High(0.335, 0.648, -68422, 0.557),
+            Ramp(0.249, 0.862, 0, 0.659);
             /*
              * Representation of the motors that make up the arm
              */

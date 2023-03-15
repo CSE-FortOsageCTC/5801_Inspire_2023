@@ -83,6 +83,11 @@ public class Swerve extends SubsystemBase {
         return gyro.getPitch();
     }
 
+    public double getRoll(){
+        return gyro.getRoll();
+    }
+
+
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }

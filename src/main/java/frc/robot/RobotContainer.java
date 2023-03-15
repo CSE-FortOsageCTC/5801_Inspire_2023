@@ -91,6 +91,7 @@ public class RobotContainer {
 
     /* Auto Chooser Setup */
     m_autoChooser.setDefaultOption("A1B1A1C", new A1B1A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.setDefaultOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
@@ -122,10 +123,10 @@ public class RobotContainer {
     dpadLeftDriver.whileTrue(dPadPOV(270));
 
     /* D-Pad Operator Input Detection */
-    dpadUpOp.whileTrue((dPadPOV(0)));
-    dpadRightOp.whileTrue((dPadPOV(90)));
-    dpadDownOp.whileTrue((dPadPOV(180)));
-    dpadLeftOp.whileTrue(dPadPOV(270));
+    //dpadUpOp.whileTrue();
+    //dpadRightOp.whileTrue();
+    //dpadDownOp.whileTrue();
+    dpadLeftOp.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Ramp));
   }
 
   public Command getAutonomousCommand() {
@@ -147,7 +148,7 @@ public class RobotContainer {
     isCone = true;
 
     //Sets LEDs to Yellow
-    //s_LEDSubsystem.SetLEDs(0.69);
+    s_LEDSubsystem.SetLEDs(0.69);
     //autoAlignCommand.updateIsCone(isCone);
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }
@@ -156,7 +157,7 @@ public class RobotContainer {
     isCone = false;
 
     //Sets LEDs to Purple
-    //s_LEDSubsystem.SetLEDs(0.91);
+    s_LEDSubsystem.SetLEDs(0.91);
     //autoAlignCommand.updateIsCone(isCone);
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }
