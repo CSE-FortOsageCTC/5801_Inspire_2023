@@ -90,13 +90,14 @@ public class RobotContainer {
     configureButtonBindings();
 
     /* Auto Chooser Setup */
-    m_autoChooser.setDefaultOption("A1B1A1C", new A1B1A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.setDefaultOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.setDefaultOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.setDefaultOption("A3C", new A3C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4C", new A3B4C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     SmartDashboard.putData("Auto Chooser", m_autoChooser);
   }
 

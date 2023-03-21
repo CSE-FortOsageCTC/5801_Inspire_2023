@@ -24,7 +24,7 @@ public class A1B1C extends SequentialCommandGroup {
     addCommands(
       // USING withTimeout FOR THE INTAKE  
       new InstantCommand(() -> drive.gyro180()),
-      new PositionArm(s_ArmSubsystem, ArmPosition.High),
+      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(5),
       //new WaitCommand(0.2),
       new IntakeAuto(s_IntakeSubsystem, 0.3).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1),

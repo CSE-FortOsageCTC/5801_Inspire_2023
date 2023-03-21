@@ -12,12 +12,12 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 
-public class A1C extends SequentialCommandGroup {
+public class A2C extends SequentialCommandGroup {
   
-  public A1C(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
+  public A2C(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
 
     addRequirements(drive, s_ArmSubsystem, s_IntakeSubsystem);
-    PathPlannerTrajectory A1B1 = PathPlanner.loadPath("A1C", 3, 1);
+    PathPlannerTrajectory A2C = PathPlanner.loadPath("A2C", 3, 1);
     
     addCommands(
       // USING withTimeout FOR THE INTAKE  
@@ -26,8 +26,9 @@ public class A1C extends SequentialCommandGroup {
       //new WaitCommand(0.2),
       new IntakeAuto(s_IntakeSubsystem, 0.3).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1),
-      drive.followTrajectoryCommand(A1B1, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)),//mobility and charge station
-      new AutoBalanceSetup(drive, true, true).withTimeout(2),
+      drive.followTrajectoryCommand(A2C, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)),//mobility and charge station
+      //new DriveForward(drive).withTimeout(4),
+      new AutoBalSetupInvert(drive, true, true).withTimeout(2),
       new AutoBalance(drive, true, true)
     );
   }

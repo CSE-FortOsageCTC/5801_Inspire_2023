@@ -161,7 +161,7 @@ public class Swerve extends SubsystemBase {
                  yController, // Y controller (usually the same values as X controller)
                  thetaController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  this::setModuleStates,  // Module states consumer
-                 false, //Automatic mirroring
+                 true, //Automatic mirroring
                  this // Requires this drive subsystem
              ) 
              .andThen(() -> stopDrive())
