@@ -13,7 +13,7 @@ import frc.robot.Constants;
 import frc.robot.SwerveModule;
 import frc.robot.subsystems.Swerve;
 
-public class AutoBalanceSetup extends CommandBase {
+public class TraverseChargeStation extends CommandBase {
     boolean autoBalanceXMode;
     boolean autoBalanceYMode = true;
     public SwerveDriveOdometry swerveOdometry;
@@ -24,13 +24,21 @@ public class AutoBalanceSetup extends CommandBase {
     private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
+    private boolean hasInclined;
+    private boolean hasDeclined;
+    private boolean hasLeveled;
+    private double outputSpeed;
 
-    public AutoBalanceSetup(frc.robot.subsystems.Swerve s_Swerve, boolean fieldRelative, boolean openLoop){
+    public TraverseChargeStation(frc.robot.subsystems.Swerve s_Swerve, boolean fieldRelative, boolean openLoop, boolean hasInclined, boolean hasDeclined, boolean hasLeveled, double outputSpeed){
         addRequirements(s_Swerve);
         this.s_Swerve = s_Swerve;
         this.fieldRelative = fieldRelative;
         this.openLoop = openLoop;
-        
+        this.hasInclined = hasInclined; // Robot is starting to climb the Charge Station
+        this.hasDeclined = hasDeclined; // Robot is passed the half way point on the Charge Station
+        this.hasLeveled = hasLeveled; // Robot Roll is 0 after Traversing Charge Station
+        this.outputSpeed = outputSpeed;
+
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
             gyro.configFactoryDefault();
     }
@@ -43,17 +51,23 @@ public class AutoBalanceSetup extends CommandBase {
     
     @Override 
     public void execute(){        
-        
-        SmartDashboard.putBoolean("auto", true); //displaying pitch value in degrees on dashboard
+        if (getRoll() > 5) {
+            hasInclined = true;
+        } else if (getRoll() < -5) {
+            hasDeclined = true;
+        } else if (getRoll() < 1 && getRoll() > -1 && hasInclined && hasDeclined) {
+            hasLeveled = true;
+        }
+
         translation = new Translation2d(-1, 0).times(Constants.Swerve.maxSpeed * 0.33);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);
     }
-
-    @Override
-    public boolean isFinished() {
-        return Math.abs(getRoll()) > 5;
-    }
+        @Override
+        public boolean isFinished () {
+            return hasLeveled;
+        }
+    
 
     @Override
     public void end(boolean interrupted) {

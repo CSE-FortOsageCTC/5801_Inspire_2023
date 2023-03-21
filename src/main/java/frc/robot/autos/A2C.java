@@ -28,7 +28,10 @@ public class A2C extends SequentialCommandGroup {
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1),
       drive.followTrajectoryCommand(A2C, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)),//mobility and charge station
       //new DriveForward(drive).withTimeout(4),
-      new AutoBalSetupInvert(drive, true, true).withTimeout(2),
+      new TraverseChargeStation(drive, true, true, false, false, false, 0).withTimeout(8),
+      new DriveForward(drive).withTimeout(0.25),
+      new DriveBackward(drive).withTimeout(0.25),
+      new AutoBalanceSetup(drive, true, true).withTimeout(2),
       new AutoBalance(drive, true, true)
     );
   }

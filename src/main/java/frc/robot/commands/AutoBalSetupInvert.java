@@ -41,12 +41,6 @@ public class AutoBalSetupInvert extends CommandBase {
 
     }
     
-    @Override
-    public void end(boolean interrupted) {
-        // TODO Auto-generated method stub
-        translation = new Translation2d(0, 0);
-                s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
-    }
     @Override 
     public void execute(){        
         
@@ -55,5 +49,17 @@ public class AutoBalSetupInvert extends CommandBase {
         translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed * 0.33);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);
+    }
+    
+    @Override
+    public boolean isFinished() {
+        return Math.abs(getRoll()) > 5;
+    }
+    
+    @Override
+    public void end(boolean interrupted) {
+        // TODO Auto-generated method stub
+        translation = new Translation2d(0, 0);
+                s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
     }
 }
