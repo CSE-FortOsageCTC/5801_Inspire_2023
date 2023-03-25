@@ -90,9 +90,11 @@ public class RobotContainer {
     configureButtonBindings();
 
     /* Auto Chooser Setup */
-    m_autoChooser.setDefaultOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.setDefaultOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.setDefaultOption("A3C", new A3C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.setDefaultOption("None", null);
+    m_autoChooser.addOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A2C Mobility", new A2MC(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A3C", new A3C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
@@ -150,7 +152,7 @@ public class RobotContainer {
 
     //Sets LEDs to Yellow
     s_LEDSubsystem.SetLEDs(0.69);
-    //autoAlignCommand.updateIsCone(isCone);
+    autoAlignCommand.updateIsCone(isCone);
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }
   public void setIsCube() {
@@ -159,7 +161,7 @@ public class RobotContainer {
 
     //Sets LEDs to Purple
     s_LEDSubsystem.SetLEDs(0.91);
-    //autoAlignCommand.updateIsCone(isCone);
+    autoAlignCommand.updateIsCone(isCone);
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }
 

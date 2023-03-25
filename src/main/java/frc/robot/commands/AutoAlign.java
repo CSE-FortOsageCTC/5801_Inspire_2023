@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +17,7 @@ public class AutoAlign extends CommandBase {
 
     private PIDController yTranslationPidController;
     private PIDController xTranslationPidController;
+    private PIDController xTranslationConeController;
     private PIDController rotationPidController;
 
     private Swerve s_Swerve;
@@ -42,9 +44,11 @@ public class AutoAlign extends CommandBase {
         
         // creating xTranslationPidController and setting the toleance and setpoint
         xTranslationPidController = new PIDController(0, 0, 0);
-        xTranslationPidController.setTolerance(isCone? .1 : 2);//5);
+        //xTranslationPidController.setTolerance(isCone? .1 : 2);//5);
         xTranslationPidController.setSetpoint(isCone ? Constants.coneLimelightAreaSetpoint:Constants.cubeLimelightAreaSetpoint);
         
+        xTranslationConeController = new PIDController(1.75, 0, 0.00035);
+        xTranslationConeController.setSetpoint(Constants.coneLimelightAreaSetpoint);
         
         rotationPidController = new PIDController(0, 0, 0);
         rotationPidController.setTolerance(2);
@@ -52,9 +56,9 @@ public class AutoAlign extends CommandBase {
 
         // puts the value of P,I and D onto the SmartDashboard
         // Will remove later
-        SmartDashboard.putNumber("P", 0.035);
-        SmartDashboard.putNumber("i", 0);
-        SmartDashboard.putNumber("d", 0.00035);
+        SmartDashboard.putNumber("AlignP", 0.035);
+        SmartDashboard.putNumber("AlignI", 0);
+        SmartDashboard.putNumber("AlignD", 0.00035);
 
         //SmartDashboard.putNumber("RotationP", 0.035);
         //SmartDashboard.putNumber("RotationI", 0);
@@ -63,28 +67,35 @@ public class AutoAlign extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        limelight.updateIsCone(isCone);
+        updateIsCone(isCone);
+    }
+
+    @Override
     public void execute() {
         // gets value of P,I and D from smartdashboard
         // will be removed
-        double kP = SmartDashboard.getNumber("P", 0);
-        double kI = SmartDashboard.getNumber("i", 0);
-        double kD = SmartDashboard.getNumber("d", 0);
+        double kP = SmartDashboard.getNumber("AlignP", 0);
+        double kI = SmartDashboard.getNumber("AlignI", 0);
+        double kD = SmartDashboard.getNumber("AlignD", 0);
 
         //double rotationkP = SmartDashboard.getNumber("RotationP", 0);
         //double rotationkI = SmartDashboard.getNumber("RotationI", 0);
         //double rotationkD = SmartDashboard.getNumber("RotationD", 0);
-
-
         
         // sets the PID values for the PIDControllers
         yTranslationPidController.setPID(kP, kI, kD);
         xTranslationPidController.setPID(kP, kI, kD);
+        xTranslationPidController.setPID(kP, kI, kD);
+
         //rotationPidController.setPID(rotationkP, rotationkI, rotationkD);
 
         double xValue = limelight.getX(); //gets the limelight X Coordinate
         double areaValue = limelight.getArea(); // gets the area percentage from the limelight
         double angularValue = limelight.getSkew();
         
+        SmartDashboard.putNumber("Limelightta", areaValue);
 
         SmartDashboard.putNumber("Xvalue", xValue);
         SmartDashboard.putNumber("Areavalue", areaValue);
@@ -96,20 +107,23 @@ public class AutoAlign extends CommandBase {
 
 
         // Calculates the x and y speed values for the translation movement
-        double ySpeed = yTranslationPidController.calculate(xValue);
-        double xSpeed = xTranslationPidController.calculate(areaValue);
+        double ySpeed = MathUtil.clamp(yTranslationPidController.calculate(xValue), -0.5, 0.5);
+        double xSpeed = MathUtil.clamp(isCone ? xTranslationConeController.calculate(areaValue):xTranslationPidController.calculate(areaValue), -0.5, 0.5);
         double angularSpeed =autoUtil.calculateRotationSpeed();//autoUtil.isFinished() ? 0: autoUtil.calculateRotationSpeed() * Constants.Swerve.maxAngularVelocity;
         
+        SmartDashboard.putNumber("AlignXSpeed", xSpeed);
+        SmartDashboard.putNumber("AlignYSpeed", ySpeed);
 
         // moves the swerve subsystem
         Translation2d translation = new Translation2d(-xSpeed, -ySpeed).times(Constants.Swerve.maxSpeed);
-        double rotation = angularSpeed * Constants.Swerve.maxAngularVelocity;
+        double rotation = 0; //angularSpeed * Constants.Swerve.maxAngularVelocity;
         s_Swerve.drive(translation, rotation, true, true);
 
     }
 
     public void updateIsCone(boolean isCone) {
         this.isCone = isCone;
+        xTranslationPidController.setSetpoint(isCone ? Constants.coneLimelightAreaSetpoint:Constants.cubeLimelightAreaSetpoint);
     }
 
     @Override
@@ -117,7 +131,7 @@ public class AutoAlign extends CommandBase {
 
         //checks if the Swerve subsystem is within the given position tolerance
         SmartDashboard.putBoolean("AtSetPoint", yTranslationPidController.atSetpoint());
-        return yTranslationPidController.atSetpoint() && xTranslationPidController.atSetpoint() && autoUtil.isFinished();
+        return false; //yTranslationPidController.atSetpoint() && xTranslationPidController.atSetpoint(); // && autoUtil.isFinished();
     }
 
     @Override
@@ -126,7 +140,8 @@ public class AutoAlign extends CommandBase {
         // tells the swerve subsystem to stop
         Translation2d translation = new Translation2d(0, 0).times(Constants.Swerve.maxSpeed);
         s_Swerve.drive(translation, 0, true, true);
-
-        SmartDashboard.putString("Is Ended", "Yes");
+        limelight.updateIsCone(false); // Switches pipeline to turn off Green LEDs
+        xTranslationPidController.reset();
+        yTranslationPidController.reset();
     }
 }

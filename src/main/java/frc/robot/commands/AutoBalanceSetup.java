@@ -50,10 +50,10 @@ public class AutoBalanceSetup extends CommandBase {
         Timer.delay(0.005);
     }
 
-    @Override
+    /*@Override
     public boolean isFinished() {
         return Math.abs(getRoll()) > 5;
-    }
+    }*/
 
     @Override
     public void end(boolean interrupted) {

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants.ArmPosition;
 import frc.robot.commands.*;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
@@ -22,16 +23,12 @@ public class A2C extends SequentialCommandGroup {
     addCommands(
       // USING withTimeout FOR THE INTAKE  
       new InstantCommand(() -> drive.gyro180()),
-      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(5),
+      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(2.75),
       //new WaitCommand(0.2),
-      new IntakeAuto(s_IntakeSubsystem, 0.3).withTimeout(.5),//place cone on top bar
+      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeInAutoConstant).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1),
-      drive.followTrajectoryCommand(A2C, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)),//mobility and charge station
-      //new DriveForward(drive).withTimeout(4),
-      new TraverseChargeStation(drive, true, true, false, false, false, 0).withTimeout(8),
-      new DriveForward(drive).withTimeout(0.25),
-      new DriveBackward(drive).withTimeout(0.25),
-      new AutoBalanceSetup(drive, true, true).withTimeout(2),
+      drive.followTrajectoryCommand(A2C, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)).withTimeout(2.5),//mobility and charge station
+      new AutoBalanceSetup(drive, true, true).withTimeout(2.5),
       new AutoBalance(drive, true, true)
     );
   }

@@ -98,6 +98,10 @@ public class Limelight extends SubsystemBase {
         return ts2.getDouble(0.0);
     }
 
+    public void updateIsCone(boolean isCone) {
+        table.getEntry("pipeline").setNumber(isCone ? Constants.conePipeline: Constants.cubePipeline);
+    }
+
     /**
      * retrieves limelight values and prints them onto the log and smartdashboard
      */

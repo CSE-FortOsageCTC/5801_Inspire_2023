@@ -31,7 +31,7 @@ public void execute(){
   rightTriggerAxis = (Math.abs(rightTriggerAxis) < Constants.stickDeadband) ? 0 : rightTriggerAxis;
 
   if (leftTriggerAxis > Constants.stickDeadband) {
-    m_IntakeSubsystem.moveIntake(0.3);
+    m_IntakeSubsystem.moveIntake(0.4);
   }
   else if (rightTriggerAxis > Constants.stickDeadband) {
     m_IntakeSubsystem.moveIntake(-0.5);

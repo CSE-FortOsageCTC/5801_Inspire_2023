@@ -24,9 +24,9 @@ public class TraverseChargeStation extends CommandBase {
     private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
-    private boolean hasInclined;
-    private boolean hasDeclined;
-    private boolean hasLeveled;
+    private boolean hasInclined = false;
+    private boolean hasDeclined = false;
+    private boolean hasLeveled = false;
     private double outputSpeed;
 
     public TraverseChargeStation(frc.robot.subsystems.Swerve s_Swerve, boolean fieldRelative, boolean openLoop, boolean hasInclined, boolean hasDeclined, boolean hasLeveled, double outputSpeed){
@@ -50,7 +50,8 @@ public class TraverseChargeStation extends CommandBase {
     }
     
     @Override 
-    public void execute(){        
+    public void execute(){    
+        SmartDashboard.putNumber("Roll Degrees", getRoll());
         if (getRoll() > 5) {
             hasInclined = true;
         } else if (getRoll() < -5) {
@@ -59,7 +60,7 @@ public class TraverseChargeStation extends CommandBase {
             hasLeveled = true;
         }
 
-        translation = new Translation2d(-1, 0).times(Constants.Swerve.maxSpeed * 0.33);
+        translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed * 0.25);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);
     }
@@ -74,5 +75,8 @@ public class TraverseChargeStation extends CommandBase {
         // TODO Auto-generated method stub
         translation = new Translation2d(0, 0);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
+        hasDeclined = false;
+        hasInclined = false;
+        hasLeveled = false;
     }
 }

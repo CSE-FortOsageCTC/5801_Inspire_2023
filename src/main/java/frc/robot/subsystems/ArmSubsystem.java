@@ -119,7 +119,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void shoulderPID(/*, double feedbackSetpoint*/) {
         shoulderPID.setPID(SmartDashboard.getNumber("Shoulder P Value", 0), SmartDashboard.getNumber("Shoulder I Value", 0), SmartDashboard.getNumber("Shoulder D Value", 0));
         //shoulderPID.setPID(Constants.AutoConstants.shoulderP, Constants.AutoConstants.shoulderI, Constants.AutoConstants.shoulderD);
-        armMasterMotor.set((shoulderPID.calculate(shoulderEncoder.getAbsolutePosition())) * -1 /*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        double speed = shoulderPID.calculate(shoulderEncoder.getAbsolutePosition());
+        speed = MathUtil.clamp(speed, -0.8, 0.8);
+        armMasterMotor.set(-speed/*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
     }
 
     /*
@@ -129,8 +131,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void elbowPID(/*, double feedbackSetpoint*/) {
         elbowPID.setPID(SmartDashboard.getNumber("Elbow P Value", 10), SmartDashboard.getNumber("Elbow I Value", 0), SmartDashboard.getNumber("Elbow D Value", 0));
         //elbowPID.setPID(Constants.AutoConstants.elbowP, Constants.AutoConstants.elbowI, Constants.AutoConstants.elbowD);
-        double speed = elbowPID.calculate(elbowEncoder.getAbsolutePosition());
-        speed = MathUtil.clamp(speed, -0.5, 0.5);
+        double speed = elbowPID.calculate((elbowEncoder.getAbsolutePosition()));
+        speed = MathUtil.clamp(speed, -0.7, 0.7);
         elbowMasterMotor.set(ControlMode.PercentOutput, speed) /*+ elbowFeedforward.calculate(feedbackSetpoint, setpoint)*/;
         //SmartDashboard.putNumber("Elbow Speed", elbowPID.calculate(elbowEncoder.getAbsolutePosition()));
         //SmartDashboard.putString("Elbow Run", "It Ran");
@@ -143,7 +145,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void wristPID() {
         wristPID.setPID(SmartDashboard.getNumber("Wrist P Value", 5.5), SmartDashboard.getNumber("Wrist I Value", 0), SmartDashboard.getNumber("Wrist D Value", 0));
         //wristPID.setPID(Constants.AutoConstants.wristP, Constants.AutoConstants.wristI, Constants.AutoConstants.wristD);
-        wristMotor.set(ControlMode.PercentOutput, (wristPID.calculate(wristEncoder.getAbsolutePosition()) * -1) /*+ wristFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        double speed = (wristPID.calculate(wristEncoder.getAbsolutePosition()) * -1);
+        speed = MathUtil.clamp(speed, -0.8, 0.8);
+        wristMotor.set(ControlMode.PercentOutput, speed /*+ wristFeedforward.calculate(feedbackSetpoint, setpoint)*/);
         //SmartDashboard.putNumber("Wrist Speed", wristMotor.getMotorOutputPercent());
     }
 
@@ -154,7 +158,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void extensionPID() {
         extensionPID.setPID(SmartDashboard.getNumber("Extension P Value", 0), SmartDashboard.getNumber("Extension I Value", 0), SmartDashboard.getNumber("Extension D Value", 0));
         //extensionPID.setPID(Constants.AutoConstants.extensionP, Constants.AutoConstants.extensionI, Constants.AutoConstants.extensionD);
-        extensionMotor.set(ControlMode.PercentOutput, extensionPID.calculate(extensionMotor.getSelectedSensorPosition()));
+        double speed = extensionPID.calculate(extensionMotor.getSelectedSensorPosition());
+        speed = MathUtil.clamp(speed, -0.8, 0.8);
+        extensionMotor.set(ControlMode.PercentOutput, speed);
     }
 
     public void zeroExtensionEncoder() {

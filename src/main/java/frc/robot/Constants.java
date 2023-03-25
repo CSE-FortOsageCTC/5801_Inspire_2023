@@ -16,7 +16,7 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
         
     
-    public static final double coneLimelightAreaSetpoint = .2;
+    public static final double coneLimelightAreaSetpoint = .27;
     public static final double cubeLimelightAreaSetpoint = 7;
     public static final int conePipeline = 1;
     public static final int cubePipeline = 2;
@@ -85,7 +85,7 @@ public final class Constants {
 
         /* Angle Encoder Invert */
         public static final boolean canCoderInvert = false;
-
+        
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
@@ -139,15 +139,22 @@ public final class Constants {
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
 
+        /* Intake Speeds */
+        public static final double intakeInAutoConstant = 0.4;
+        public static final double intakeInTeleopConstant = 0.4;
+        
+        public static final double intakeOutAutoConstant = -0.3;
+        public static final double intakeOutTeleopConstant = -0.3;
+
         /*
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0.191, 0.62, -400, 0.057), //0.276      0.239
-            Floor(0.270, 0.988, -62669, 0.457),//0.675
-            Mid(0.307, 0.696, 0, 0.314), //0.486
-            High(0.335, 0.648, -62696, 0.452), //0.557
-            Ramp(0.249, 0.862, 0, 0.534); //0.659
+            Default(0.1, 0.61, -400, 0.085), //0.276      0.239
+            Floor(0.248, 0.959, -62879, 0.651),//0.675
+            Mid(0.197, 0.713, -19370, 0.360), //0.486
+            High(0.262, 0.635, -43998, 0.502), //0.557
+            Ramp(0.349, 0.862, 0, 0.534); //0.659
             /*
              * Representation of the motors that make up the arm
              */
@@ -202,7 +209,7 @@ public final class Constants {
         public static final double extensionD = 0;
 
         //PID constants for shoulder motor
-        public static final double shoulderP = 3.5;
+        public static final double shoulderP = 4.5;
         public static final double shoulderI = 0;
         public static final double shoulderD = 0;
 

@@ -50,7 +50,13 @@ public class AutoBalance extends CommandBase {
         balancePID.setD(SmartDashboard.getNumber("BalD", 0));
 
         double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
-        yAxisRate = Math.sin(pitchAngleRadians) * -1;//MathUtil.clamp(balancePID.calculate(pitchAngleRadians), -0.5, 0.5);
+        yAxisRate = Math.sin(pitchAngleRadians) * -1;
+
+        /*if (yAxisRate < 0.15 && yAxisRate > 0){
+            yAxisRate = 0.15;
+        } else if (yAxisRate > -0.15 && yAxisRate < 0){
+            yAxisRate = -0.15;
+        }*/
         SmartDashboard.putNumber("YAxisRate", yAxisRate);
         /*if ( autoBalanceYMode ) {
             
