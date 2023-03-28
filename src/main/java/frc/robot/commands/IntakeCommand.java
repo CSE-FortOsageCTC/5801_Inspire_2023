@@ -31,10 +31,10 @@ public void execute(){
   rightTriggerAxis = (Math.abs(rightTriggerAxis) < Constants.stickDeadband) ? 0 : rightTriggerAxis;
 
   if (leftTriggerAxis > Constants.stickDeadband) {
-    m_IntakeSubsystem.moveIntake(0.4);
+    m_IntakeSubsystem.moveIntake(Constants.AutoConstants.intakeInAutoConstant);
   }
   else if (rightTriggerAxis > Constants.stickDeadband) {
-    m_IntakeSubsystem.moveIntake(-0.5);
+    m_IntakeSubsystem.moveIntake(Constants.AutoConstants.intakeOutTeleopConstant);
   }
   else {
     m_IntakeSubsystem.moveIntake(0);

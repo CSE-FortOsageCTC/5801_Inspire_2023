@@ -27,7 +27,7 @@ public class PositionArm extends CommandBase{
         extensionSetpoint = position.getSetpoint(ArmMotor.Extension);
         shoulderSetpoint = position.getSetpoint(ArmMotor.Shoulder);
         
-        //SmartDashboard.putNumber("Wrist Setpoint", 0.48);
+        SmartDashboard.putNumber("Wrist Setpoint", 0.48);
         SmartDashboard.putNumber("Wrist P Value", Constants.AutoConstants.wristP);
         SmartDashboard.putNumber("Wrist I Value", Constants.AutoConstants.wristI);
         SmartDashboard.putNumber("Wrist D Value", Constants.AutoConstants.wristD);

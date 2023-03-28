@@ -36,7 +36,7 @@ public class TeleopArm extends CommandBase {
 
         s_Arm.moveShoulder(leftYAxis * 0.3);
         s_Arm.extendElbow(leftXAxis * 0.6);
-        s_Arm.moveElbow(rightYAxis * 0.6);
-        s_Arm.moveWrist(rightXAxis * 0.8);
+        s_Arm.moveElbow(rightYAxis * 0.7);
+        s_Arm.moveWrist(rightXAxis * -1);
     }
 }

@@ -15,9 +15,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 
-public class A1B1A1 extends SequentialCommandGroup {
+public class A1B1F extends SequentialCommandGroup {
   
-  public A1B1A1(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
+  public A1B1F(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
 
     addRequirements(drive, s_ArmSubsystem, s_IntakeSubsystem);
     PathPlannerTrajectory A1B1 = PathPlanner.loadPath("A1B1", 3, 1);
@@ -33,9 +33,9 @@ public class A1B1A1 extends SequentialCommandGroup {
       new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
       new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(0.75),
-      drive.followTrajectoryCommand(A1B1, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Floor)),//move to and prepare arm for field cone
+      drive.followTrajectoryCommand(A1B1, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.InverseFloor)),//move to and prepare arm for field cone
       new RotateToHeading(drive, 0).withTimeout(2),
-      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeInTeleopConstant).withTimeout(0.000001),
+      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeInAutoConstant).withTimeout(0.000001),
       new DriveForward(drive).withTimeout(1),//pick of field cone
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001)//,
 

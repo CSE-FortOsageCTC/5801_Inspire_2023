@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.swing.text.Position;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
@@ -48,6 +50,7 @@ public class RobotContainer {
   private final JoystickButton yButton = new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton aButton = new JoystickButton(operator, XboxController.Button.kA.value);
   private final JoystickButton bButton = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton startButton = new JoystickButton(operator, XboxController.Button.kStart.value);
 
   /* D-Pad POV Driver */
   POVButton dpadUpDriver = new POVButton(driver, 0);
@@ -64,7 +67,7 @@ public class RobotContainer {
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   private final LEDSubsystem s_LEDSubsystem = new LEDSubsystem();
-  private final IntakeSubsystem s_IntakeSubsystem = new IntakeSubsystem();
+  private final IntakeSubsystem s_IntakeSubsystem = new IntakeSubsystem(s_LEDSubsystem);
   private final ArmSubsystem s_ArmSubsystem = new ArmSubsystem();
 
   /* Variables */
@@ -89,6 +92,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    setIsCone();
+
     /* Auto Chooser Setup */
     m_autoChooser.setDefaultOption("None", null);
     m_autoChooser.addOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
@@ -99,6 +104,7 @@ public class RobotContainer {
     m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4C", new A3B4C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A1B1F", new A1B1F(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     //m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     SmartDashboard.putData("Auto Chooser", m_autoChooser);
   }
@@ -115,7 +121,8 @@ public class RobotContainer {
     xButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Mid));
     yButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.High));
     aButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Floor));
-    bButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Default));
+    bButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Travel));
+    startButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.outputArmValues()));
     leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
     rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
 
@@ -126,10 +133,9 @@ public class RobotContainer {
     dpadLeftDriver.whileTrue(dPadPOV(270));
 
     /* D-Pad Operator Input Detection */
-    //dpadUpOp.whileTrue();
-    //dpadRightOp.whileTrue();
-    //dpadDownOp.whileTrue();
-    dpadLeftOp.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Ramp));
+    dpadDownOp.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.HighPlace));
+    dpadRightOp.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Default));
+    dpadLeftOp.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.FloorCube));
   }
 
   public Command getAutonomousCommand() {
@@ -151,7 +157,7 @@ public class RobotContainer {
     isCone = true;
 
     //Sets LEDs to Yellow
-    s_LEDSubsystem.SetLEDs(0.69);
+    s_LEDSubsystem.SetLEDs(0.67);
     autoAlignCommand.updateIsCone(isCone);
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }

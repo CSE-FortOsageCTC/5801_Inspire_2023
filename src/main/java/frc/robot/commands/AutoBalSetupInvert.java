@@ -44,18 +44,17 @@ public class AutoBalSetupInvert extends CommandBase {
     @Override 
     public void execute(){        
         
-        SmartDashboard.putBoolean("auto", true);//verifies if code actually runs
-////displaying pitch value in degrees on dashboard
+        SmartDashboard.putBoolean("auto", true); //displaying pitch value in degrees on dashboard
         translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed * 0.33);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);
     }
-    
-    @Override
+
+    /*@Override
     public boolean isFinished() {
         return Math.abs(getRoll()) > 5;
-    }
-    
+    }*/
+
     @Override
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub

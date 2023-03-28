@@ -178,10 +178,10 @@ public class Swerve extends SubsystemBase {
         double yaw = ((gyro.getYaw() % 360) + 360) % 360;
         SmartDashboard.putNumber("Gyro Yaw Degrees", yaw);
         SmartDashboard.putNumber("AngleDegrees", gyro.getPitch());
-        /*for(SwerveModule mod : mSwerveMods){
+        for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
-        }*/
+        }
     }
 }

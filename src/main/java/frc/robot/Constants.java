@@ -112,7 +112,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 16;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(179.736);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(180.526);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -122,7 +122,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 18;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(143.613);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(142.223);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -140,21 +140,26 @@ public final class Constants {
         public static final double kPThetaController = 1;
 
         /* Intake Speeds */
-        public static final double intakeInAutoConstant = 0.4;
-        public static final double intakeInTeleopConstant = 0.4;
+        public static final double intakeInAutoConstant = 0.7;
+        public static final double intakeInTeleopConstant = 0.6;
         
-        public static final double intakeOutAutoConstant = -0.3;
-        public static final double intakeOutTeleopConstant = -0.3;
+        public static final double intakeOutAutoConstant = -0.4;
+        public static final double intakeOutTeleopConstant = -0.4;
 
         /*
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0.1, 0.61, -400, 0.085), //0.276      0.239
-            Floor(0.248, 0.959, -62879, 0.651),//0.675
-            Mid(0.197, 0.713, -19370, 0.360), //0.486
-            High(0.262, 0.635, -43998, 0.502), //0.557
-            Ramp(0.349, 0.862, 0, 0.534); //0.659
+            Default(0.137, 0.6174, 0, minimumWristEncoder), //0.085    0.625
+            Travel(0.1587, 0.9634, -31062, maxWristEncoder),
+            Floor(0.21411780827368657, 0.9332029303339332, -66584.0, maxWristEncoder),//0.651                   0.4283
+            FloorCube(0.22008262247413582, 0.9603255592989646, -66532.0, maxWristEncoder),
+            Mid(0.1879, 0.7443, -65627, maxWristEncoder), //0.360                  0.4283
+            MidPlace(0.1879, 0.8021, -65627, maxWristEncoder),
+            High(0.281, 0.572, -66020, maxWristEncoder), //0.502                 0.4283
+            HighPlace(0.281, 0.652, -66020, maxWristEncoder),
+            InverseFloor(0.230, 0.915, -58297, minimumWristEncoder);            
+            //Ramp(0.349, 0.862, 0); //0.534
             /*
              * Representation of the motors that make up the arm
              */
@@ -173,7 +178,6 @@ public final class Constants {
              * @param shoulderSetpoint Setpoint for the shoulder motor
              * @param elbowSetpoint Setpoint for the elbow motor
              * @param extensionSetpoint Setpoint for the shoulder extension motor
-             * @param wristSetpoint Setpoint for the wrist motor
              */
             ArmPosition(double shoulderSetpoint, double elbowSetpoint, double extensionSetpoint, double wristSetpoint) {
                 setpoints = new HashMap<>();
@@ -199,7 +203,8 @@ public final class Constants {
         public static final double wristD = 0;
 
         //PID constants for elbow motor
-        public static final double elbowP = 4.5;
+        public static final double elbowP = 5.5
+        ;
         public static final double elbowI = 0;
         public static final double elbowD = 0;
 
@@ -212,6 +217,10 @@ public final class Constants {
         public static final double shoulderP = 4.5;
         public static final double shoulderI = 0;
         public static final double shoulderD = 0;
+
+        //Wrist Encoder Max
+        public static final double maxWristEncoder = 0.917;
+        public static final double minimumWristEncoder = 0.419;
 
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
