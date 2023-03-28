@@ -22,12 +22,12 @@ public class A3C extends SequentialCommandGroup {
     
     addCommands(
       new InstantCommand(() -> drive.gyro180()),
-      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(4.5),
+      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(3),
       new PositionArm(s_ArmSubsystem, ArmPosition.HighPlace).withTimeout(1.5),
       //new WaitCommand(0.2),
-      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.25),//place cone on top bar
+      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
-      new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(0.1),
+      new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(0.75),
       drive.followTrajectoryCommand(A3C, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)),//mobility and charge station
       new AutoBalanceSetup(drive, true, true).withTimeout(2),
       new AutoBalance(drive, true, true)

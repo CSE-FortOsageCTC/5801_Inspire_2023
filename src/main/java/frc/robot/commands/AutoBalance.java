@@ -17,11 +17,12 @@ public class AutoBalance extends CommandBase {
     boolean autoBalanceYMode = true;
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
-    public double pitchAngleDegrees;
+    public double rollAngleDegrees;
     private Swerve s_Swerve;
     private Translation2d translation;
     private boolean fieldRelative;
     private boolean openLoop;
+    private double xAxisRate;
     private double yAxisRate;
     private PIDController balancePID;
 
@@ -40,7 +41,7 @@ public class AutoBalance extends CommandBase {
 
     @Override 
     public void execute(){        
-        pitchAngleDegrees = s_Swerve.getRoll();
+        rollAngleDegrees = s_Swerve.getRoll();
         //SmartDashboard.putBoolean("auto", true);
         //SmartDashboard.putNumber("Gyro Pitch", s_Swerve.getPitch());//displaying pitch value in degrees on dashboard
         //SmartDashboard.putNumber("yAxisRate", yAxisRate);
@@ -49,8 +50,13 @@ public class AutoBalance extends CommandBase {
         balancePID.setI(SmartDashboard.getNumber("BalI", 0)); 
         balancePID.setD(SmartDashboard.getNumber("BalD", 0));
 
-        double pitchAngleRadians = pitchAngleDegrees * (Math.PI / 180.0);
-        yAxisRate = Math.sin(pitchAngleRadians) * -1;
+        double rollAngleRadians = rollAngleDegrees * (Math.PI / 180.0);
+        double pitchAngleRadians = s_Swerve.getPitch() * (Math.PI / 180.0);
+        double yaw = ((s_Swerve.gyro.getYaw() % 360) + 360) % 360;
+        boolean isForward = yaw > 270 || yaw < 90;
+        boolean isLeft = yaw > 0 && yaw < 180;
+        xAxisRate = Math.sin(pitchAngleRadians) * (isForward ? -1 : 1);
+        yAxisRate = Math.sin(rollAngleRadians) * (isLeft ? -1 : 1);
 
         /*if (yAxisRate < 0.15 && yAxisRate > 0){
             yAxisRate = 0.15;
@@ -62,7 +68,7 @@ public class AutoBalance extends CommandBase {
             
         }*/
         try {
-            translation = new Translation2d(yAxisRate,0).times(Constants.Swerve.maxSpeed * 0.55);
+            translation = new Translation2d(yAxisRate + xAxisRate, 0).times(Constants.Swerve.maxSpeed * 0.55);
             s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         } catch( RuntimeException ex ) {
             String err_string = "Drive system error:  " + ex.getMessage();

@@ -26,16 +26,17 @@ public class A3B4A3 extends SequentialCommandGroup {
     
     addCommands(
       new InstantCommand(() -> drive.gyro180()),
-      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(4.5),
+      new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(3),
       new PositionArm(s_ArmSubsystem, ArmPosition.HighPlace).withTimeout(1.5),
       //new WaitCommand(0.2),
-      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.25),//place cone on top bar
+      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
-      new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(0.1),
+      new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(0.75),
       drive.followTrajectoryCommand(A3B4, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Floor)),//move to and prepare arm for field cone
-      new IntakeAuto(s_IntakeSubsystem, -0.5).withTimeout(0.1),
+      new RotateToHeading(drive, 0).withTimeout(2),
+      new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeInTeleopConstant).withTimeout(0.000001),
       new DriveForward(drive).withTimeout(1),//pick of field cone
-      new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1)//,
+      new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001)//,
       /*drive.followTrajectoryCommand(B4A3, false).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Mid)),//move back to spawn and prepare arm to place cone
       new AutoAlign(drive, false).withTimeout(2.5),
       drive.followTrajectoryCommand(Left18, false),
