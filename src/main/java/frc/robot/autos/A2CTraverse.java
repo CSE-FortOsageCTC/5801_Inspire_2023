@@ -13,9 +13,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 
-public class A2MC extends SequentialCommandGroup {
+public class A2CTraverse extends SequentialCommandGroup {
   
-  public A2MC(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
+  public A2CTraverse(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
 
     addRequirements(drive, s_ArmSubsystem, s_IntakeSubsystem);
     PathPlannerTrajectory A2C = PathPlanner.loadPath("A2C", 3, 1);
@@ -27,13 +27,9 @@ public class A2MC extends SequentialCommandGroup {
       //new WaitCommand(0.2),
       new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5),//place cone on top bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
-      new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(0.75),
-      drive.followTrajectoryCommand(A2C, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Default)).withTimeout(2.5),//mobility and charge station
-      //new DriveForward(drive).withTimeout(4),
-      new TraverseChargeStation(drive, true, true, false, false, false, 0).withTimeout(8),
-      //new DriveBackward(drive).withTimeout(0.5),
-      new WaitCommand(0.25),
-      new AutoBalanceSetup(drive, true, true).withTimeout(2),
+      new PositionArm(s_ArmSubsystem, ArmPosition.Default).withTimeout(3),
+      new TraverseChargeStation(drive, true, true, false, false, false, 0).withTimeout(6),
+      new AutoBalanceSetup(drive, true, true).withTimeout(3),
       new AutoBalance(drive, true, true)
     );
   }

@@ -29,8 +29,8 @@ public class TeleopArm extends CommandBase {
         double rightXAxis = controller.getRawAxis(XboxController.Axis.kRightX.value);
         
         /* Deadbands */
-        leftYAxis = (Math.abs(leftYAxis) < Constants.stickDeadband) ? 0 : leftYAxis;
-        leftXAxis = (Math.abs(leftXAxis) < Constants.stickDeadband) ? 0 : leftXAxis;
+        leftYAxis = (Math.abs(leftYAxis) < Constants.stickLeftDeadband) ? 0 : leftYAxis;
+        leftXAxis = (Math.abs(leftXAxis) < Constants.stickLeftDeadband) ? 0 : leftXAxis;
         rightYAxis = (Math.abs(rightYAxis) < Constants.stickDeadband) ? 0 : rightYAxis;
         rightXAxis = (Math.abs(rightXAxis) < Constants.stickDeadband) ? 0 : rightXAxis;
 

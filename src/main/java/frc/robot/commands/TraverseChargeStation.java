@@ -20,6 +20,7 @@ public class TraverseChargeStation extends CommandBase {
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
     public double rollAngleDegrees;
+    public double pitchAngleDegrees;
     private Swerve s_Swerve;
     private Translation2d translation;
     private boolean fieldRelative;
@@ -48,15 +49,21 @@ public class TraverseChargeStation extends CommandBase {
         return rollAngleDegrees;
 
     }
+
+    public double getPitch() { // getting pitch
+        pitchAngleDegrees = gyro.getPitch();
+        return pitchAngleDegrees;
+
+    }
     
     @Override 
     public void execute(){    
         SmartDashboard.putNumber("Roll Degrees", getRoll());
-        if (getRoll() > 5) {
+        if (getRoll() > 5 || getPitch() > 5) {
             hasInclined = true;
-        } else if (getRoll() < -5) {
+        } else if (getRoll() < -5 || getPitch() < 5) {
             hasDeclined = true;
-        } else if (getRoll() < 1 && getRoll() > -1 && hasInclined && hasDeclined) {
+        } else if (getRoll() < 1 && getRoll() > -1  || getPitch() < 1 && getPitch() > 1 && hasInclined && hasDeclined) {
             hasLeveled = true;
         }
 

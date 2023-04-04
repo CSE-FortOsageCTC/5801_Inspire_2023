@@ -14,6 +14,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
+    public static final double stickLeftDeadband = 0.12;
         
     
     public static final double coneLimelightAreaSetpoint = .27;
@@ -150,15 +151,15 @@ public final class Constants {
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0.137, 0.6174, 0, minimumWristEncoder), //0.085    0.625
-            Travel(0.1587, 0.9634, -31062, maxWristEncoder),
-            Floor(0.21411780827368657, 0.9332029303339332, -66584.0, maxWristEncoder),//0.651                   0.4283
-            FloorCube(0.22008262247413582, 0.9603255592989646, -66532.0, maxWristEncoder),
-            Mid(0.1879, 0.7443, -65627, maxWristEncoder), //0.360                  0.4283
-            MidPlace(0.1879, 0.8021, -65627, maxWristEncoder),
-            High(0.281, 0.572, -66020, maxWristEncoder), //0.502                 0.4283
-            HighPlace(0.281, 0.652, -66020, maxWristEncoder),
-            InverseFloor(0.230, 0.915, -58297, minimumWristEncoder);            
+            Default(0.12451772787233044, 0.5819592686495694, 0.0, minimumWristEncoder), //0.085    0.625
+            Travel(0.15245594147618022, 0.9319216627873873, -29991.0, maxWristEncoder),
+            Floor(0.22116075632476462, 0.8716146266079605, -62771.0, maxWristEncoder),//0.651                   0.4283
+            FloorCube(0.2290451822177684, 0.8831975301596809, -65085.0, maxWristEncoder),
+            Mid(0.17886232845105016, 0.6869382678763845, -65741.0, maxWristEncoder), //0.360                  0.4283
+            MidPlace(0.1879, 0.7921, -65627, maxWristEncoder),
+            High(0.28002425711189455, 0.5276950517761625, -66537.0, maxWristEncoder), //0.502                 0.4283
+            HighPlace(0.2736018159825288, 0.6158449326296885, -65961.0, maxWristEncoder),
+            InverseFloor(0.230, 0.905, -58297, minimumWristEncoder);            
             //Ramp(0.349, 0.862, 0); //0.534
             /*
              * Representation of the motors that make up the arm
@@ -203,8 +204,7 @@ public final class Constants {
         public static final double wristD = 0;
 
         //PID constants for elbow motor
-        public static final double elbowP = 5.5
-        ;
+        public static final double elbowP = 6;
         public static final double elbowI = 0;
         public static final double elbowD = 0;
 

@@ -10,6 +10,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,6 +52,7 @@ public class RobotContainer {
   private final JoystickButton aButton = new JoystickButton(operator, XboxController.Button.kA.value);
   private final JoystickButton bButton = new JoystickButton(operator, XboxController.Button.kB.value);
   private final JoystickButton startButton = new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final JoystickButton backButton = new JoystickButton(operator, XboxController.Button.kBack.value);
 
   /* D-Pad POV Driver */
   POVButton dpadUpDriver = new POVButton(driver, 0);
@@ -99,6 +101,7 @@ public class RobotContainer {
     m_autoChooser.addOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A2C Mobility", new A2MC(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A2C Traverse First", new A2CTraverse(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3C", new A3C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
@@ -125,6 +128,7 @@ public class RobotContainer {
     startButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.outputArmValues()));
     leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
     rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
+    backButton.onTrue(new InstantCommand(() -> s_LEDSubsystem.setSwitchableChannel()));
 
     /* D-Pad Driver Input Detection */
     dpadUpDriver.whileTrue(dPadPOV(0));
