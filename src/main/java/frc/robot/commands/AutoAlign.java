@@ -24,18 +24,22 @@ public class AutoAlign extends CommandBase {
     private Limelight limelight;
     private AutoRotateUtil autoUtil;
     private boolean isCone;
+    private double maxXSpeed;
+    private double maxYSpeed;
 
     /**
      * Constructer for AutoAlign
      * 
      * @param s_Swerve swerve subsystem to be aligned with the april tag
      */
-    public AutoAlign(Swerve s_Swerve, boolean isCone) {
+    public AutoAlign(Swerve s_Swerve, boolean isCone, double maxXSpeed, double maxYSpeed) {
         limelight = new Limelight(isCone);
         this.s_Swerve = s_Swerve;
         this.autoUtil = new AutoRotateUtil(s_Swerve, 180);
         addRequirements(s_Swerve);
         this.isCone = isCone;
+        this.maxXSpeed = maxXSpeed;
+        this.maxYSpeed = maxYSpeed;
 
         // creating yTranslationPidController and setting the toleance and setpoint
         yTranslationPidController = new PIDController(0, 0, 0);
@@ -107,8 +111,8 @@ public class AutoAlign extends CommandBase {
 
 
         // Calculates the x and y speed values for the translation movement
-        double ySpeed = MathUtil.clamp(yTranslationPidController.calculate(xValue), -0.5, 0.5);
-        double xSpeed = MathUtil.clamp(isCone ? xTranslationConeController.calculate(areaValue):xTranslationPidController.calculate(areaValue), -0.15, 0.15);
+        double ySpeed = MathUtil.clamp(yTranslationPidController.calculate(xValue), -maxYSpeed, maxYSpeed);
+        double xSpeed = MathUtil.clamp(isCone ? xTranslationConeController.calculate(areaValue):xTranslationPidController.calculate(areaValue), -maxXSpeed, maxXSpeed);
         double angularSpeed =autoUtil.calculateRotationSpeed();//autoUtil.isFinished() ? 0: autoUtil.calculateRotationSpeed() * Constants.Swerve.maxAngularVelocity;
         
         SmartDashboard.putNumber("AlignXSpeed", xSpeed);

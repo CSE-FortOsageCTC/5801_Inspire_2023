@@ -6,6 +6,8 @@ package frc.robot;
 
 import javax.swing.text.Position;
 
+import org.opencv.core.Point;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
@@ -76,7 +78,7 @@ public class RobotContainer {
   public static boolean isCone = true;
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
-  private AutoAlign autoAlignCommand = new AutoAlign(s_Swerve, false);
+  private AutoAlign autoAlignCommand = new AutoAlign(s_Swerve, false, 0.15, 0.5);
   private AutoBalance autoBalanceCommand = new AutoBalance(s_Swerve, true, true);
 
   /* Paths */
@@ -108,6 +110,7 @@ public class RobotContainer {
     m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3B4C", new A3B4C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1B1F", new A1B1F(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("AIAuto", new InstantCommand(() -> generateAI()));
     //m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     SmartDashboard.putData("Auto Chooser", m_autoChooser);
   }
@@ -126,8 +129,10 @@ public class RobotContainer {
     aButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Floor));
     bButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Travel));
     startButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.outputArmValues()));
-    leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
-    rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
+    //leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
+    //rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
+    leftBumper.onTrue(new PositionArm(s_ArmSubsystem, ArmPosition.minimumWrist));
+    rightBumper.onTrue(new PositionArm(s_ArmSubsystem, ArmPosition.maxWrist));
     backButton.onTrue(new InstantCommand(() -> s_LEDSubsystem.setSwitchableChannel()));
 
     /* D-Pad Driver Input Detection */
@@ -144,6 +149,44 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_autoChooser.getSelected();
+  }
+
+  public void generateAI() {
+    int startNode = (int)SmartDashboard.getNumber("Starting Node", 9);
+    Point startPos = null;
+    switch (startNode) {
+      case 1:
+        startPos = Constants.FieldConstants.n1;
+        break;
+      case 2:
+        startPos = Constants.FieldConstants.n2;
+        break;
+      case 3:
+        startPos = Constants.FieldConstants.n3;
+        break;
+      case 4:
+        startPos = Constants.FieldConstants.n4;
+        break;
+      case 5:
+        startPos = Constants.FieldConstants.n5;
+        break;
+      case 6:
+        startPos = Constants.FieldConstants.n6;
+        break;
+      case 7:
+        startPos = Constants.FieldConstants.n7;
+        break;
+      case 8:
+        startPos = Constants.FieldConstants.n8;
+        break;
+      case 9:
+        startPos = Constants.FieldConstants.n9;
+        break;
+      default:
+        startPos = Constants.FieldConstants.n9;
+        break;
+    }
+    new PathGPT(s_Swerve, s_ArmSubsystem, new Limelight(isCone), s_IntakeSubsystem, (int)SmartDashboard.getNumber("Piece Number", 0), SmartDashboard.getBoolean("Charge Station", false), startPos).schedule();
   }
 
   /* Outputs D-Pad POV Value In Dashboard */

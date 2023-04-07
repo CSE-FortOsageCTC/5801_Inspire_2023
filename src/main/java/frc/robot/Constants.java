@@ -3,6 +3,8 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.opencv.core.Point;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -155,11 +157,13 @@ public final class Constants {
             Travel(0.15245594147618022, 0.9319216627873873, -29991.0, maxWristEncoder),
             Floor(0.22116075632476462, 0.8716146266079605, -62771.0, maxWristEncoder),//0.651                   0.4283
             FloorCube(0.2290451822177684, 0.8831975301596809, -65085.0, maxWristEncoder),
-            Mid(0.17886232845105016, 0.6869382678763845, -65741.0, maxWristEncoder), //0.360                  0.4283
-            MidPlace(0.1879, 0.7921, -65627, maxWristEncoder),
-            High(0.28002425711189455, 0.5276950517761625, -66537.0, maxWristEncoder), //0.502                 0.4283
-            HighPlace(0.2736018159825288, 0.6158449326296885, -65961.0, maxWristEncoder),
-            InverseFloor(0.230, 0.905, -58297, minimumWristEncoder);            
+            Mid(0.17886232845105016, 0.6869382678763845, -65741.0, rotateWristNearest), //0.360                  0.4283
+            MidPlace(0.1879, 0.7921, -65627, rotateWristNearest),
+            High(0.28002425711189455, 0.5276950517761625, -66537.0, rotateWristNearest), //0.502                 0.4283
+            HighPlace(0.2736018159825288, 0.6158449326296885, -65961.0, rotateWristNearest),
+            InverseFloor(0.230, 0.905, -58297, minimumWristEncoder),
+            minimumWrist(-1, -1, -1, minimumWristEncoder),
+            maxWrist(-1, -1, -1, maxWristEncoder);            
             //Ramp(0.349, 0.862, 0); //0.534
             /*
              * Representation of the motors that make up the arm
@@ -218,14 +222,54 @@ public final class Constants {
         public static final double shoulderI = 0;
         public static final double shoulderD = 0;
 
-        //Wrist Encoder Max
+        //Wrist Encoder Limits
         public static final double maxWristEncoder = 0.917;
         public static final double minimumWristEncoder = 0.419;
+        public static final int rotateWristNearest = -1;
+
+        //Motor Max Speeds
+        public static final double maxElbowSpeed = 0.6;
+        public static final double maxExtensionSpeed = 0.8;
+        public static final double maxWristSpeed = 1;
 
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+      }
+    
+      public static final class FieldConstants {
+
+        //Node setpoints
+        public static final Point n1 = new Point(1.87, 0.50);
+        public static final Point n2 = new Point(1.87, 1.06);
+        public static final Point n3 = new Point(1.87, 1.59);
+        public static final Point n4 = new Point(1.87, 2.18);
+        public static final Point n5 = new Point(1.87, 2.73);
+        public static final Point n6 = new Point(1.87, 3.32);
+        public static final Point n7 = new Point(1.87, 3.86);
+        public static final Point n8 = new Point(1.87, 4.44);
+        public static final Point n9 = new Point(1.87, 5.00);
+
+        //Game piece setpoints
+        public static final Point g1 = new Point(7.07, 0.92);
+        public static final Point g2 = new Point(7.07, 2.15);
+        public static final Point g3 = new Point(7.07, 3.39);
+        public static final Point g4 = new Point(7.07, 4.60);
+        public static final Point highXClimb = new Point(2.36, 3.41);
+        public static final Point lowXClimb = new Point(2.36, 2.13);
+
+        //Charge station setpoints
+        public static final Point lowXLowY = new Point(2.90, 1.52);
+        public static final Point highXLowY = new Point(4.88, 1.52);
+        public static final Point lowXHighY = new Point(2.90, 4.00);
+        public static final Point highXHighY = new Point(4.88, 4.00);
+
+        //Traversal setpoints
+        public static final Point lowXLowYTraversal = new Point(2.90 + 0.629, 1.52 + 0.629);
+        public static final Point highXLowYTraversal = new Point(4.88 + 0.629, 1.52 + 0.629);
+        public static final Point lowXHighYTraversal = new Point(2.90 + 0.629, 4.00 + 0.629);
+        public static final Point highXHighYTraversal = new Point(4.88 + 0.629, 4.00 + 0.629);
       }
 
 }

@@ -90,6 +90,9 @@ public class ArmSubsystem extends SubsystemBase {
     //Moves wrist motor
     public void moveWrist(double speed) {
         SmartDashboard.putNumber("Wrist speed 2", speed);
+        if (getElbowEncoder() < 0) { //TODO: change number to actual encoder position
+            return;
+        }
         if ((getWristEncoder() > Constants.AutoConstants.maxWristEncoder && speed < 0) || (getWristEncoder() < Constants.AutoConstants.minimumWristEncoder && speed > 0)) {
             wristMotor.set(ControlMode.PercentOutput, 0);
             return;
@@ -100,6 +103,42 @@ public class ArmSubsystem extends SubsystemBase {
     //Moves elbow extension motor
     public void extendElbow(double speed) {
         extensionMotor.set(ControlMode.PercentOutput, speed);
+    }
+
+    public boolean feedForwardElbow(double position, boolean isPositive) {
+        if (isPositive && position < getElbowEncoder()) {
+            moveElbow(Constants.AutoConstants.maxElbowSpeed); //may need to multiply by -1
+            return false;
+        }
+        if (!isPositive && position > getElbowEncoder()) {
+            moveElbow(Constants.AutoConstants.maxElbowSpeed * -1); //may need to remove -1
+            return false;
+        }
+        return true;
+    }
+
+    public boolean feedForwardExtension(double position, boolean isPositive) {
+        if (isPositive && position < getExtensionEncoder()) {
+            extendElbow(Constants.AutoConstants.maxExtensionSpeed); //may need to multiply by -1
+            return false;
+        }
+        if (!isPositive && position > getExtensionEncoder()) {
+            extendElbow(Constants.AutoConstants.maxExtensionSpeed * -1); //may need to remove -1
+            return false;
+        }
+        return true;
+    }
+
+    public boolean feedForwardWrist(double position, boolean isPositive) {
+        if (isPositive && position < getWristEncoder()) {
+            extendElbow(Constants.AutoConstants.maxWristSpeed); //may need to multiply by -1
+            return false;
+        }
+        if (!isPositive && position > getWristEncoder()) {
+            extendElbow(Constants.AutoConstants.maxWristSpeed * -1); //may need to remove -1
+            return false;
+        }
+        return true;
     }
 
     public double getShoulderEncoder() {
@@ -192,5 +231,17 @@ public class ArmSubsystem extends SubsystemBase {
         shoulderPID.setSetpoint(shoulder);
         elbowPID.setSetpoint(elbow);
         extensionPID.setSetpoint(extension);
+    }
+
+    public boolean isWristFinished() {
+        return wristPID.atSetpoint();
+    }
+
+    public boolean isElbowFinished() {
+        return elbowPID.atSetpoint();
+    }
+
+    public boolean isExtensionFinished() {
+        return extensionPID.atSetpoint();
     }
 }
