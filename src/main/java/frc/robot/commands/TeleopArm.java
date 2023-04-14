@@ -34,9 +34,9 @@ public class TeleopArm extends CommandBase {
         rightYAxis = (Math.abs(rightYAxis) < Constants.stickDeadband) ? 0 : rightYAxis;
         rightXAxis = (Math.abs(rightXAxis) < Constants.stickDeadband) ? 0 : rightXAxis;
 
-        s_Arm.moveShoulder(leftYAxis * 0.3);
-        s_Arm.extendElbow(leftXAxis * 0.6);
-        s_Arm.moveElbow(rightYAxis * 0.7);
-        s_Arm.moveWrist(rightXAxis * -1);
+        s_Arm.moveDart(leftYAxis * -0.5);
+        s_Arm.extendArm(rightYAxis * 1);
+        //s_Arm.moveElbow(rightYAxis * 0.7);
+        s_Arm.moveWrist(rightXAxis * 0.2);
     }
 }

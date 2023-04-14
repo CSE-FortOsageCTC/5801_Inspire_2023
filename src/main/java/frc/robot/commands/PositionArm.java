@@ -15,14 +15,13 @@ public class PositionArm extends CommandBase{
     private final ArmSubsystem s_Arm;
     private ArmPosition position;
     private double wristSetpoint = 0;
-    private double elbowSetpoint = 0;
+    private double dartSetpoint = 0;
     private double extensionSetpoint = 0;
-    private double shoulderSetpoint = 0;
     private double extensionTimer = 0;
     private boolean multiPosition = false;
     private int positionNumber = 0;
     private double lastWristSetpoint = 0;
-    private double lastElbowSetpoint = 0;
+    private double lastDartSetpoint = 0;
     private double lastExtensionSetpoint = 0;
     private List <ArmPosition> positions = new ArrayList<ArmPosition>();
 
@@ -32,29 +31,23 @@ public class PositionArm extends CommandBase{
         this.position = position;
 
         wristSetpoint = position.getSetpoint(ArmMotor.Wrist);
-        elbowSetpoint = position.getSetpoint(ArmMotor.Elbow);
+        dartSetpoint = position.getSetpoint(ArmMotor.Dart);
         extensionSetpoint = position.getSetpoint(ArmMotor.Extension);
-        shoulderSetpoint = position.getSetpoint(ArmMotor.Shoulder);
         
         SmartDashboard.putNumber("Wrist Setpoint", 0.48);
         SmartDashboard.putNumber("Wrist P Value", Constants.AutoConstants.wristP);
         SmartDashboard.putNumber("Wrist I Value", Constants.AutoConstants.wristI);
         SmartDashboard.putNumber("Wrist D Value", Constants.AutoConstants.wristD);
 
-        //SmartDashboard.putNumber("Elbow Setpoint", 0.75);
-        SmartDashboard.putNumber("Elbow P Value", Constants.AutoConstants.elbowP);
-        SmartDashboard.putNumber("Elbow I Value", Constants.AutoConstants.elbowI);
-        SmartDashboard.putNumber("Elbow D Value", Constants.AutoConstants.elbowD);
+        //SmartDashboard.putNumber("Dart Setpoint", 0.75);
+        SmartDashboard.putNumber("Dart P Value", Constants.AutoConstants.dartP);
+        SmartDashboard.putNumber("Dart I Value", Constants.AutoConstants.dartI);
+        SmartDashboard.putNumber("Dart D Value", Constants.AutoConstants.dartD);
 
         //SmartDashboard.putNumber("Extension Setpoint", 0);
         SmartDashboard.putNumber("Extension P Value", Constants.AutoConstants.extensionP);
         SmartDashboard.putNumber("Extension I Value", Constants.AutoConstants.extensionI);
         SmartDashboard.putNumber("Extension D Value", Constants.AutoConstants.extensionD);
-
-        //SmartDashboard.putNumber("Shoulder Setpoint", 0);
-        SmartDashboard.putNumber("Shoulder P Value", Constants.AutoConstants.shoulderP);
-        SmartDashboard.putNumber("Shoulder I Value", Constants.AutoConstants.shoulderI);
-        SmartDashboard.putNumber("Shoulder D Value", Constants.AutoConstants.shoulderD);
         
     }
 
@@ -63,106 +56,110 @@ public class PositionArm extends CommandBase{
         this.multiPosition = true;
         this.s_Arm = s_Arm;
 
-        lastWristSetpoint = s_Arm.getWristEncoder();
-        lastElbowSetpoint = s_Arm.getElbowEncoder();
-        lastExtensionSetpoint = s_Arm.getExtensionEncoder();
         ArmPosition position = positions.get(positions.size()-1);
         wristSetpoint = position.getSetpoint(ArmMotor.Wrist);
-        elbowSetpoint = position.getSetpoint(ArmMotor.Elbow);
+        dartSetpoint = position.getSetpoint(ArmMotor.Dart);
         extensionSetpoint = position.getSetpoint(ArmMotor.Extension);
-        shoulderSetpoint = position.getSetpoint(ArmMotor.Shoulder);
         
         SmartDashboard.putNumber("Wrist Setpoint", 0.48);
         SmartDashboard.putNumber("Wrist P Value", Constants.AutoConstants.wristP);
         SmartDashboard.putNumber("Wrist I Value", Constants.AutoConstants.wristI);
         SmartDashboard.putNumber("Wrist D Value", Constants.AutoConstants.wristD);
 
+        /*
         //SmartDashboard.putNumber("Elbow Setpoint", 0.75);
         SmartDashboard.putNumber("Elbow P Value", Constants.AutoConstants.elbowP);
         SmartDashboard.putNumber("Elbow I Value", Constants.AutoConstants.elbowI);
         SmartDashboard.putNumber("Elbow D Value", Constants.AutoConstants.elbowD);
+        */
 
         //SmartDashboard.putNumber("Extension Setpoint", 0);
         SmartDashboard.putNumber("Extension P Value", Constants.AutoConstants.extensionP);
         SmartDashboard.putNumber("Extension I Value", Constants.AutoConstants.extensionI);
         SmartDashboard.putNumber("Extension D Value", Constants.AutoConstants.extensionD);
-
-        //SmartDashboard.putNumber("Shoulder Setpoint", 0);
-        SmartDashboard.putNumber("Shoulder P Value", Constants.AutoConstants.shoulderP);
-        SmartDashboard.putNumber("Shoulder I Value", Constants.AutoConstants.shoulderI);
-        SmartDashboard.putNumber("Shoulder D Value", Constants.AutoConstants.shoulderD);
     }
 
    @Override
    public void initialize() {
-
+    lastWristSetpoint = s_Arm.getWristEncoder();
+    lastDartSetpoint = s_Arm.getDartEncoder();
+    lastExtensionSetpoint = s_Arm.getExtensionEncoder();
    }
 
    @Override
    public void execute () {
     
-    if (multiPosition && positionNumber != positions.size() - 2) {
-        if (s_Arm.feedForwardElbow(positions.get(positionNumber).getSetpoint(ArmMotor.Elbow), lastElbowSetpoint < s_Arm.getElbowEncoder()) && 
-            s_Arm.feedForwardExtension(positions.get(positionNumber).getSetpoint(ArmMotor.Extension), lastExtensionSetpoint < s_Arm.getExtensionEncoder()) &&
-            s_Arm.feedForwardWrist(positions.get(positionNumber).getSetpoint(ArmMotor.Wrist), lastWristSetpoint < s_Arm.getWristEncoder())) 
+    if (multiPosition && positionNumber != positions.size() - 1) {
+        System.out.println("Setpoint " + positions.get(positionNumber).getSetpoint(ArmMotor.Dart));
+        System.out.println("Last Setpoint " + lastDartSetpoint);
+        System.out.println("Encoder " + s_Arm.getDartEncoder());
+        if (/*s_Arm.feedForwardElbow(positions.get(positionNumber).getSetpoint(ArmMotor.Elbow),lastElbowSetpoint < s_Arm.getElbowEncoder()) && */
+            s_Arm.feedForwardExtension(positions.get(positionNumber).getSetpoint(ArmMotor.Extension), lastExtensionSetpoint <= s_Arm.getExtensionEncoder()) &&
+            //s_Arm.feedForwardWrist(positions.get(positionNumber).getSetpoint(ArmMotor.Wrist), lastWristSetpoint < s_Arm.getWristEncoder()) &&
+            s_Arm.feedForwardDart(positions.get(positionNumber).getSetpoint(ArmMotor.Dart), lastDartSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Dart)))
             {
-            lastWristSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Elbow);
-            lastElbowSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Extension);
-            lastExtensionSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Wrist);
+            System.out.println("Position Arm Multi");
+            lastWristSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Wrist);
+            lastDartSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Dart);
+            lastExtensionSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Extension);
             positionNumber ++;
+            s_Arm.moveDart(0);
+            s_Arm.moveWrist(0);
+            s_Arm.extendArm(0);
+        }
+        
+    } else {
+        s_Arm.moveDart(0);
+        s_Arm.moveWrist(0);
+        s_Arm.extendArm(0);
+        if (wristSetpoint == Constants.AutoConstants.rotateWristNearest) {
+            double halfwayPoint = ((Constants.AutoConstants.maxWristEncoder - Constants.AutoConstants.minimumWristEncoder) / 2) + Constants.AutoConstants.minimumWristEncoder;
+            wristSetpoint = s_Arm.getWristEncoder() > halfwayPoint ? Constants.AutoConstants.maxWristEncoder : Constants.AutoConstants.minimumWristEncoder;
+        }
+        s_Arm.setSetpoints(wristSetpoint, dartSetpoint, extensionSetpoint);
+    
+        //double speed = pidController.calculate(s_Arm.getWristEncoder(), setpoint) * -1;
+        //s_Arm.moveWrist(speed);
+        if (wristSetpoint != -1) {
+        s_Arm.wristPID();
+        }
+        if (dartSetpoint != -1) {
+        s_Arm.dartPID();
+        }
+        if (extensionSetpoint != -1) {
+        s_Arm.extensionPID();
         }
     }
-    //double wristSetpoint = SmartDashboard.getNumber("Wrist Setpoint", 0.48);
-    //double elbowSetpoint = SmartDashboard.getNumber("Elbow Setpoint", 0.75);
-    //double extensionSetpoint = SmartDashboard.getNumber("Extension Setpoint", 0);
-    //double shoulderSetpoint = SmartDashboard.getNumber("Shoulder Setpoint", 0);
-    if (wristSetpoint == Constants.AutoConstants.rotateWristNearest) {
-        double halfwayPoint = ((Constants.AutoConstants.maxWristEncoder - Constants.AutoConstants.minimumWristEncoder) / 2) + Constants.AutoConstants.minimumWristEncoder;
-        wristSetpoint = s_Arm.getWristEncoder() > halfwayPoint ? Constants.AutoConstants.maxWristEncoder : Constants.AutoConstants.minimumWristEncoder;
-    }
-    s_Arm.setSetpoints(wristSetpoint, shoulderSetpoint, elbowSetpoint, extensionSetpoint);
-
-    //double speed = pidController.calculate(s_Arm.getWristEncoder(), setpoint) * -1;
-    //s_Arm.moveWrist(speed);
-    if (wristSetpoint != -1) {
-    s_Arm.wristPID();
-    }
-    if (elbowSetpoint != -1) {
-    s_Arm.elbowPID();
-    }
-    if (extensionSetpoint != -1) {
-    s_Arm.extensionPID();
-    }
-    if (shoulderSetpoint != -1) {
-    s_Arm.shoulderPID();
-    }
+    
    }
 
    @Override
    public boolean isFinished () {
     boolean isWristFinished = true;
-    boolean isElbowFinished = true;
+    //boolean isElbowFinished = true;
     boolean isExtensionFinished = true;
     //return pidController.atSetpoint();
+    boolean isDartFinished = true;
     if (wristSetpoint != -1) {
         isWristFinished = s_Arm.isWristFinished();
     }
-    if (elbowSetpoint != -1) {
-        isElbowFinished = s_Arm.isElbowFinished();
+    if (dartSetpoint != -1) {
+        isDartFinished = s_Arm.isDartFinished();
     }
     if (extensionSetpoint != -1) {
         isExtensionFinished = s_Arm.isExtensionFinished();
     }
-    return isWristFinished && isElbowFinished && isExtensionFinished;
+    return isWristFinished && isDartFinished && isExtensionFinished;
    }
 
    @Override
    public void end (boolean interupted) {
     System.out.println("yep it sure did end before");
-    s_Arm.moveElbow(0);
-    s_Arm.moveShoulder(0);
+    //s_Arm.moveElbow(0);
+    s_Arm.moveDart(0);
     s_Arm.moveWrist(0);
-    s_Arm.extendElbow(0);
+    s_Arm.extendArm(0);
+    positionNumber = 0;
     System.out.println("yep it sure did end...");
    }
 }

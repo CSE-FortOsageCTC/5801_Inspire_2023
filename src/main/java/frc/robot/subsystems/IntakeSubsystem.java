@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +22,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMasterMotor.restoreFactoryDefaults();
     //intakeSlaveMotor.restoreFactoryDefaults();
     intakeMasterMotor.setSmartCurrentLimit(20);
+    intakeMasterMotor.setIdleMode(IdleMode.kBrake);
     intakeMasterMotor.burnFlash();
     //intakeSlaveMotor.follow(intakeMasterMotor, true);
   }

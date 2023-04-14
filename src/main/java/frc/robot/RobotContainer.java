@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import javax.swing.text.Position;
 
 import org.opencv.core.Point;
@@ -23,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.Constants.AutoConstants.ArmPosition;
+import frc.robot.Constants.AutoConstants.ArmPosition.ArmMotor;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -124,8 +127,12 @@ public class RobotContainer {
     autoBalance.whileTrue(autoBalanceCommand);
 
     /* Operator Buttons */
-    xButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Mid));
-    yButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.High));
+    ArmPosition midSequence = ArmPosition.MidSequence;
+    ArmPosition mid = ArmPosition.Mid;
+    ArmPosition high = ArmPosition.High;
+    ArmPosition highSequence = ArmPosition.HighSequence;
+    xButton.whileTrue(new PositionArm(s_ArmSubsystem, List.of(midSequence, mid)));
+    yButton.whileTrue(new PositionArm(s_ArmSubsystem, List.of(midSequence, highSequence, high)));
     aButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Floor));
     bButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Travel));
     startButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.outputArmValues()));

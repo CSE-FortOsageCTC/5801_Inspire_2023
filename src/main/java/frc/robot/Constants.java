@@ -153,24 +153,25 @@ public final class Constants {
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0.12451772787233044, 0.5819592686495694, 0.0, minimumWristEncoder), //0.085    0.625
-            Travel(0.15245594147618022, 0.9319216627873873, -29991.0, maxWristEncoder),
-            Floor(0.22116075632476462, 0.8716146266079605, -62771.0, maxWristEncoder),//0.651                   0.4283
-            FloorCube(0.2290451822177684, 0.8831975301596809, -65085.0, maxWristEncoder),
-            Mid(0.17886232845105016, 0.6869382678763845, -65741.0, rotateWristNearest), //0.360                  0.4283
-            MidPlace(0.1879, 0.7921, -65627, rotateWristNearest),
-            High(0.28002425711189455, 0.5276950517761625, -66537.0, rotateWristNearest), //0.502                 0.4283
-            HighPlace(0.2736018159825288, 0.6158449326296885, -65961.0, rotateWristNearest),
-            InverseFloor(0.230, 0.905, -58297, minimumWristEncoder),
-            minimumWrist(-1, -1, -1, minimumWristEncoder),
-            maxWrist(-1, -1, -1, maxWristEncoder);            
+            Default(0, 0.0, minimumWristEncoder), //0.085    0.625
+            Travel(20.71419334411621, 0, maxWristEncoder),
+            Floor(27.452180862426758, 2413, minimumWristEncoder),//Changed already           0.651                   0.4283
+            FloorCube(27.452180862426758, 2413, minimumWristEncoder),
+            Mid(107.64464569091797, 1352, maxWristEncoder), //0.360                  0.4283
+            MidSequence(105.45445251464844, 0.0, minimumWristEncoder),
+            MidPlace(88.86087799072266, 1352, maxWristEncoder),
+            High(131.02255249023438, 4359.0, maxWristEncoder), //0.502                 0.4283
+            HighSequence(121.90469360351562, 1858.0, maxWristEncoder),
+            HighPlace(116.5006332397461, 3819, maxWristEncoder),
+            InverseFloor(0.905, -58297, minimumWristEncoder),
+            minimumWrist(-1, -1, minimumWristEncoder),
+            maxWrist(-1, -1, maxWristEncoder);            
             //Ramp(0.349, 0.862, 0); //0.534
             /*
              * Representation of the motors that make up the arm
              */
             public enum ArmMotor {
-                Shoulder,
-                Elbow,
+                Dart,
                 Extension,
                 Wrist;
             }
@@ -180,14 +181,12 @@ public final class Constants {
             private Map<ArmMotor, Double> setpoints;
             /**
              * Constructor for armposition enum
-             * @param shoulderSetpoint Setpoint for the shoulder motor
-             * @param elbowSetpoint Setpoint for the elbow motor
+             * @param dartSetpoint Setpoint for the dart motor
              * @param extensionSetpoint Setpoint for the shoulder extension motor
              */
-            ArmPosition(double shoulderSetpoint, double elbowSetpoint, double extensionSetpoint, double wristSetpoint) {
+            ArmPosition(double dartSetpoint, double extensionSetpoint, double wristSetpoint) {
                 setpoints = new HashMap<>();
-                setpoints.put(ArmMotor.Shoulder, shoulderSetpoint);
-                setpoints.put(ArmMotor.Elbow, elbowSetpoint);
+                setpoints.put(ArmMotor.Dart, dartSetpoint);
                 setpoints.put(ArmMotor.Extension, extensionSetpoint);
                 setpoints.put(ArmMotor.Wrist, wristSetpoint);
             }
@@ -203,33 +202,37 @@ public final class Constants {
         }
 
         //PID constants for wrist motor
-        public static final double wristP = 6;
+        public static final double wristP = .003;
         public static final double wristI = 0;
         public static final double wristD = 0;
 
-        //PID constants for elbow motor
-        public static final double elbowP = 6;
-        public static final double elbowI = 0;
-        public static final double elbowD = 0;
+        //PID constants for dart motor
+        public static final double dartP = .02;//6;
+        public static final double dartI = 0;
+        public static final double dartD = 0;
 
-        //PID constants for elbow extension motor
-        public static final double extensionP = 0.0005;
-        public static final double extensionI = 0.0001;
-        public static final double extensionD = 0;
-
-        //PID constants for shoulder motor
-        public static final double shoulderP = 4.5;
-        public static final double shoulderI = 0;
-        public static final double shoulderD = 0;
+        //PID constants for extension motor
+        public static final double extensionP = 0.005;//0.0005;
+        public static final double extensionI = 0;
+        public static final double extensionD = 0.00005;
 
         //Wrist Encoder Limits
-        public static final double maxWristEncoder = 0.917;
-        public static final double minimumWristEncoder = 0.419;
+        public static final double maxWristEncoder = -1573;
+        public static final double minimumWristEncoder = 0;
         public static final int rotateWristNearest = -1;
 
+        //Dart Encoder Limits
+        public static final double maxBumperDartEncoder = 118.9;
+        public static final double minDartEncoder = 0;
+        public static final double maxDartEncoder = 131.0;
+
+        //Extension Encoder Limits
+        public static final double maxExtensionEncoder = 4616.0;
+        public static final double minExtensionEncoder = 350.0;
+
         //Motor Max Speeds
-        public static final double maxElbowSpeed = 0.6;
-        public static final double maxExtensionSpeed = 0.8;
+        public static final double maxDartSpeed = 1;
+        public static final double maxExtensionSpeed = 1;
         public static final double maxWristSpeed = 1;
 
         // Constraint for the motion profilied robot angle controller

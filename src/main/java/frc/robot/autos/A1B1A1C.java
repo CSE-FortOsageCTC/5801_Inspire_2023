@@ -34,7 +34,7 @@ public class A1B1A1C extends SequentialCommandGroup {
       new DriveForward(drive).withTimeout(1),//pick of field cone
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1),
       drive.followTrajectoryCommand(B1A1, false).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.Mid)).withTimeout(2),//move back to spawn and prepare arm to place cone
-      new AutoAlign(drive, false).withTimeout(2.5),
+      //new AutoAlign(drive, false).withTimeout(2.5),
       drive.followTrajectoryCommand(Left18, false),
       new IntakeAuto(s_IntakeSubsystem, 0.3).withTimeout(.5),//place cone on mid bar
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.1)
