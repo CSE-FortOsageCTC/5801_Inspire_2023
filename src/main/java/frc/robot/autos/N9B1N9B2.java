@@ -17,9 +17,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Swerve;
 
-public class A9B1A9B2A8 extends SequentialCommandGroup {
+public class N9B1N9B2 extends SequentialCommandGroup {
   
-  public A9B1A9B2A8(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
+  public N9B1N9B2(Swerve drive, ArmSubsystem s_ArmSubsystem, IntakeSubsystem s_IntakeSubsystem) {
     addRequirements(drive, s_ArmSubsystem, s_IntakeSubsystem);
     PathPlannerTrajectory A9B1 = PathPlanner.loadPath("9B1", 3, 1);
     PathPlannerTrajectory B1A9 = PathPlanner.loadPath("B19", 3, 1);

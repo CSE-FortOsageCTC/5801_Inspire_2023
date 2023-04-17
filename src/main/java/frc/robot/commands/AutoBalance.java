@@ -68,7 +68,7 @@ public class AutoBalance extends CommandBase {
             
         }*/
         try {
-            translation = new Translation2d(yAxisRate + xAxisRate, 0).times(Constants.Swerve.maxSpeed * 0.55);
+            translation = new Translation2d(yAxisRate + xAxisRate, 0).times(Constants.Swerve.maxSpeed * 0.45);
             s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         } catch( RuntimeException ex ) {
             String err_string = "Drive system error:  " + ex.getMessage();

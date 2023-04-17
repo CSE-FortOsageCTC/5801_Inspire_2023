@@ -103,17 +103,17 @@ public class RobotContainer {
 
     /* Auto Chooser Setup */
     m_autoChooser.setDefaultOption("None", null);
-    m_autoChooser.addOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A9B1A9B2A8", new A9B1A9B2A8(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A2C Mobility", new A2MC(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A2C Traverse First", new A2CTraverse(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A3C", new A3C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A3B4C", new A3B4C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
-    m_autoChooser.addOption("A1B1F", new A1B1F(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A3", new N1B4N1B3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A1", new N9B1N9B2(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A2C Mobility", new A2MC(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A2C Traverse First", new N2CTraverse(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A3Mobility", new N1Mobility(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A3B4C", new A3B4C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    //m_autoChooser.addOption("A1B1F", new A1B1F(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("AIAuto", new InstantCommand(() -> generateAI()));
     //m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     SmartDashboard.putData("Auto Chooser", m_autoChooser);

@@ -26,6 +26,7 @@ public class PositionArm extends CommandBase{
     private double lastDartSetpoint = 0;
     private double lastExtensionSetpoint = 0;
     private List <ArmPosition> positions = new ArrayList<ArmPosition>();
+    private double dartFeedForwardSpeed = .6;
 
     //private String m_position;
     public PositionArm(ArmSubsystem s_Arm, ArmPosition position) {
@@ -82,6 +83,10 @@ public class PositionArm extends CommandBase{
         SmartDashboard.putNumber("Extension I Value", Constants.AutoConstants.extensionI);
         SmartDashboard.putNumber("Extension D Value", Constants.AutoConstants.extensionD);
     }
+    public PositionArm withDartSpeed(double speed){
+        dartFeedForwardSpeed = speed;
+        return this;
+    }
 
    @Override
    public void initialize() {
@@ -108,7 +113,7 @@ public class PositionArm extends CommandBase{
             extensionFinished = s_Arm.feedForwardExtension(positions.get(positionNumber).getSetpoint(ArmMotor.Extension), lastExtensionSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Extension));
         }
         if (positions.get(positionNumber).getSetpoint(ArmMotor.Dart) != -1){
-            dartFinished = s_Arm.feedForwardDart(positions.get(positionNumber).getSetpoint(ArmMotor.Dart), lastDartSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Dart));
+            dartFinished = s_Arm.feedForwardDart(positions.get(positionNumber).getSetpoint(ArmMotor.Dart), lastDartSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Dart), dartFeedForwardSpeed);
         }
         if (extensionFinished && dartFinished && isWristFinished) {
             lastWristSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Wrist);

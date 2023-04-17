@@ -256,13 +256,14 @@ public class ArmSubsystem extends SubsystemBase {
         return true;
     }
 
-    public boolean feedForwardDart(double position, boolean isPositive) {
+    public boolean feedForwardDart(double position, boolean isPositive, double speed) {
+        System.out.println(speed);
         if (isPositive && position > getDartEncoder()) {
-            moveDart(Constants.AutoConstants.maxDartSpeed * 0.6); //may need to multiply by -1
+            moveDart(Constants.AutoConstants.maxDartSpeed * speed); 
             return false;
         }
         if (!isPositive && position < getDartEncoder()) {
-            moveDart(-Constants.AutoConstants.maxDartSpeed * 0.6); //may need to remove -1
+            moveDart(-Constants.AutoConstants.maxDartSpeed * speed); 
             return false;
         }
         return true;
