@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants.ArmPosition;
 import frc.robot.subsystems.*;
 
 public class PathGPT extends CommandBase {
@@ -34,6 +35,7 @@ public class PathGPT extends CommandBase {
     private int piecesScored = 0;
     private int scoringNode = 0;
     private Point nodePos = null;
+    private Point closestPiece = null;
     private List <Point> availablePieces = new ArrayList<Point>();
     private List <Point> highTraversalPoints = new ArrayList<Point>();
     private List <Point> lowTraversalPoints = new ArrayList<Point>();
@@ -78,7 +80,10 @@ public class PathGPT extends CommandBase {
         List <CommandBase> commands = new ArrayList<>();
         List <SubsystemBase> subsystems = new ArrayList<>();
 
-        commands.add(new PositionArm(s_ArmSubsystem, Constants.AutoConstants.ArmPosition.Floor));
+        ArmPosition floor = Constants.AutoConstants.ArmPosition.Floor;
+        ArmPosition floorSequence = Constants.AutoConstants.ArmPosition.FloorSequence;
+
+        commands.add(new PositionArm(s_ArmSubsystem, List.of(floorSequence, floor)));
         commands.add(new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeInAutoConstant));
 
         subsystems.add(s_IntakeSubsystem);
@@ -90,9 +95,14 @@ public class PathGPT extends CommandBase {
     public void generatePickupSequence(SequentialCommandWrapper armSequence, PathPlannerTrajectory trajectory) {
         CommandBase driveCommand = s_Swerve.followTrajectoryCommand(trajectory, true).alongWith(armSequence).withTimeout(4);
         CommandBase notifyCommand = new InstantCommand(() -> lastPickupSequenceFinished());
+        CommandBase zeroGyro = new InstantCommand(() -> s_Swerve.gyro180());
 
         List <CommandBase> commandList = new ArrayList<>();
         List <SubsystemBase> subsystems = new ArrayList<>();
+
+        if (piecesScored == 0) {
+            commandList.add(zeroGyro);
+        }
 
         commandList.add(driveCommand);
         commandList.add(notifyCommand);
@@ -103,26 +113,35 @@ public class PathGPT extends CommandBase {
 
         SequentialCommandWrapper pickupCommands = new SequentialCommandWrapper(subsystems, commandList);
         phase = -1;
+        System.out.println("phase is -1");
+        System.out.println("Scheduling Pickup Sequence...");
         pickupCommands.schedule();
     }
     
     public void lastPickupSequenceFinished() {
         phase = 1;
+        startPos = closestPiece;//new Point (s_Swerve.getPose().getX(), s_Swerve.getPose().getY());
+        System.out.println("Last Pickup Occured At: " + startPos);
+        System.out.println("phase is 1");
     }
 
     public void lastScoringSequenceFinished() {
         piecesScored ++;
         startPos = nodePos;
+        System.out.println("Pieces Scored: " + piecesScored);
         if (pieceNum <= piecesScored) {
             if (chargeStation) {
                 phase = 2;
+                System.out.println("phase is 2");
             }
             else {
                 phase = -1;
+                System.out.println("phase is -1");
             }
         }
         else {
             phase = 0;
+            System.out.println("phase is 0");
         }
     }
 
@@ -130,8 +149,9 @@ public class PathGPT extends CommandBase {
 
         List <CommandBase> commands = new ArrayList<>();
         List <SubsystemBase> subsystems = new ArrayList<>();
-
-        commands.add(new PositionArm(s_ArmSubsystem, Constants.AutoConstants.ArmPosition.Travel));
+        ArmPosition travel = ArmPosition.Travel;
+        ArmPosition travelSequence = ArmPosition.TravelSequence;
+        commands.add(new PositionArm(s_ArmSubsystem, List.of(travelSequence, travel)));
 
         subsystems.add(s_ArmSubsystem);
 
@@ -148,7 +168,7 @@ public class PathGPT extends CommandBase {
         List <SubsystemBase> subsystems = new ArrayList<>();
 
         commandList.add(driveCommand);
-        commandList.add(alignCommand);
+        //commandList.add(alignCommand);
         commandList.add(outtakeCommand);
         commandList.add(notifyCommand);
 
@@ -159,6 +179,8 @@ public class PathGPT extends CommandBase {
 
         SequentialCommandWrapper scoringCommands = new SequentialCommandWrapper(subsystems, commandList);
         phase = -1;
+        System.out.println("phase is -1");
+        System.out.println("Scheduling Scoring Command...");
         scoringCommands.schedule();
     }
 
@@ -172,7 +194,9 @@ public class PathGPT extends CommandBase {
                 closestPoint = p;
             }
         }
+        this.closestPiece = closestPoint;
         availablePieces.remove(closestPoint);
+        System.out.println("The Closest Piece is " + closestPoint);
         return closestPoint;
     }
 
@@ -191,6 +215,7 @@ public class PathGPT extends CommandBase {
         }
         availableNodes.remove(closestPoint);
         nodePos = closestPoint;
+        System.out.println("The Closest Node is " + closestPoint);
         return closestPoint;
     }
 
@@ -204,20 +229,22 @@ public class PathGPT extends CommandBase {
                 closestTraversal = p;
             }
         }
+        System.out.println("The Closest Traversal is " + closestTraversal);
         return closestTraversal;
     }
 
     private Point closestLowTraversal(Point start) {
         double minimumDistance = 1000000;
-        Point closetTraversal = null;
+        Point closestTraversal = null;
         for (Point p : lowTraversalPoints) {
             double distance = Math.hypot(start.x - p.x, start.y - p.y);
             if (distance < minimumDistance) {
                 minimumDistance = distance;
-                closetTraversal = p;
+                closestTraversal = p;
             }
         }
-        return closetTraversal;
+        System.out.println("The Closest Traversal is " + closestTraversal);
+        return closestTraversal;
     }
 
     private Point closestChargeClimb(Point start) {
@@ -283,12 +310,13 @@ public class PathGPT extends CommandBase {
 
     private PathPlannerTrajectory generatePath(List <Point> coordinates, double startingRot, double endingRot) {
         List <PathPoint> pathPoints = new ArrayList<PathPoint>();
-
+        System.out.println("Generating Path...");
         for (Point p : coordinates) {
+            System.out.println("Each Point " + p);
             pathPoints.add(new PathPoint(new Translation2d(p.x, p.y), Rotation2d.fromDegrees(endingRot)));
         }
         return PathPlanner.generatePath(
-        new PathConstraints(4, 3), 
+        new PathConstraints(1, 1), 
         pathPoints
         );
     }
@@ -332,7 +360,7 @@ public class PathGPT extends CommandBase {
                 }
                 trajectoryPoints.add(endPos);
         
-                PathPlannerTrajectory trajectoryScoring = generatePath(trajectoryPoints, 180, 180);
+                PathPlannerTrajectory trajectoryScoring = generatePath(trajectoryPoints, 0, 0);
                 SequentialCommandWrapper armSequenceScoring = generateTravelArmSequence();
                 generateScoringSequence(armSequenceScoring, trajectoryScoring);
                 break;

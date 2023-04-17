@@ -153,17 +153,23 @@ public final class Constants {
          * Representation of the different positions the arm can be set to
          */
         public enum ArmPosition {
-            Default(0, 0.0, minimumWristEncoder), //0.085    0.625
-            Travel(20.71419334411621, 0, maxWristEncoder),
-            Floor(27.452180862426758, 2413, minimumWristEncoder),//Changed already           0.651                   0.4283
-            FloorCube(27.452180862426758, 2413, minimumWristEncoder),
-            Mid(107.64464569091797, 1352, maxWristEncoder), //0.360                  0.4283
-            MidSequence(105.45445251464844, 0.0, minimumWristEncoder),
-            MidPlace(88.86087799072266, 1352, maxWristEncoder),
-            High(131.02255249023438, 4359.0, maxWristEncoder), //0.502                 0.4283
-            HighSequence(121.90469360351562, 1858.0, maxWristEncoder),
-            HighPlace(116.5006332397461, 3819, maxWristEncoder),
-            InverseFloor(0.905, -58297, minimumWristEncoder),
+            Default(0.0, 0.0, -1), //0.085    0.625
+            Travel(8.309545516967773, 0, -1),
+            TravelSequence(-1, minExtensionEncoder, -1),
+            Floor(20, 1906.0,-1),//Changed already           0.651                   0.4283
+            FloorCube(28.285499572753906, 2518.0, -1),
+            FloorSequence(25, 0, -1),
+            Mid(111.59651184082031, 1443.0, -1), //0.360                  0.4283
+            MidSequence(-1, 0.0, -1),
+            MidPlace(0.5888974502237166, 1444.0, -1),
+            High(132, 4119.0, -1), //0.502                 0.4283
+            HighSequence(132, -1, maxWristEncoder),
+            HighSequence1(50, -1, -1),
+            HighPlace(106.73999786376953, 4119.0, -1),
+            InverseFloor(0.905, -58297, -1),
+
+            AutoWristRotate(25,0,maxWristEncoder),
+
             minimumWrist(-1, -1, minimumWristEncoder),
             maxWrist(-1, -1, maxWristEncoder);            
             //Ramp(0.349, 0.862, 0); //0.534
@@ -207,7 +213,7 @@ public final class Constants {
         public static final double wristD = 0;
 
         //PID constants for dart motor
-        public static final double dartP = .02;//6;
+        public static final double dartP = 0.025;//6;
         public static final double dartI = 0;
         public static final double dartD = 0;
 
@@ -223,8 +229,8 @@ public final class Constants {
 
         //Dart Encoder Limits
         public static final double maxBumperDartEncoder = 118.9;
-        public static final double minDartEncoder = 0;
-        public static final double maxDartEncoder = 131.0;
+        public static final double minDartEncoder = 0.0;
+        public static final double maxDartEncoder = 132.0;
 
         //Extension Encoder Limits
         public static final double maxExtensionEncoder = 4616.0;

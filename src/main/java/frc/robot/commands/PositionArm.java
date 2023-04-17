@@ -3,8 +3,10 @@ package frc.robot.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants.ArmPosition;
 import frc.robot.Constants.AutoConstants.ArmPosition.ArmMotor;
@@ -56,6 +58,8 @@ public class PositionArm extends CommandBase{
         this.multiPosition = true;
         this.s_Arm = s_Arm;
 
+        System.out.println("ArmPosition List: " + positions);
+
         ArmPosition position = positions.get(positions.size()-1);
         wristSetpoint = position.getSetpoint(ArmMotor.Wrist);
         dartSetpoint = position.getSetpoint(ArmMotor.Dart);
@@ -88,49 +92,67 @@ public class PositionArm extends CommandBase{
 
    @Override
    public void execute () {
-    
     if (multiPosition && positionNumber != positions.size() - 1) {
-        System.out.println("Setpoint " + positions.get(positionNumber).getSetpoint(ArmMotor.Dart));
-        System.out.println("Last Setpoint " + lastDartSetpoint);
-        System.out.println("Encoder " + s_Arm.getDartEncoder());
-        if (/*s_Arm.feedForwardElbow(positions.get(positionNumber).getSetpoint(ArmMotor.Elbow),lastElbowSetpoint < s_Arm.getElbowEncoder()) && */
-            s_Arm.feedForwardExtension(positions.get(positionNumber).getSetpoint(ArmMotor.Extension), lastExtensionSetpoint <= s_Arm.getExtensionEncoder()) &&
-            //s_Arm.feedForwardWrist(positions.get(positionNumber).getSetpoint(ArmMotor.Wrist), lastWristSetpoint < s_Arm.getWristEncoder()) &&
-            s_Arm.feedForwardDart(positions.get(positionNumber).getSetpoint(ArmMotor.Dart), lastDartSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Dart)))
-            {
-            System.out.println("Position Arm Multi");
+        //System.out.println("Setpoint " + positions.get(positionNumber).getSetpoint(ArmMotor.Extension));
+        //System.out.println("Last Setpoint " + lastExtensionSetpoint);
+        //System.out.println("Encoder " + s_Arm.getExtensionEncoder());
+        boolean extensionFinished = true;
+        boolean dartFinished = true;
+        boolean isWristFinished = true;
+        if  (positions.get(positionNumber).getSetpoint(ArmMotor.Wrist) != -1){
+            s_Arm.setSetpoints(positions.get(positionNumber).getSetpoint(ArmMotor.Wrist) , dartSetpoint, extensionSetpoint);
+            s_Arm.wristPID();
+            isWristFinished = s_Arm.isWristFinished();
+        }
+        if (positions.get(positionNumber).getSetpoint(ArmMotor.Extension) != -1){
+            extensionFinished = s_Arm.feedForwardExtension(positions.get(positionNumber).getSetpoint(ArmMotor.Extension), lastExtensionSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Extension));
+        }
+        if (positions.get(positionNumber).getSetpoint(ArmMotor.Dart) != -1){
+            dartFinished = s_Arm.feedForwardDart(positions.get(positionNumber).getSetpoint(ArmMotor.Dart), lastDartSetpoint <= positions.get(positionNumber).getSetpoint(ArmMotor.Dart));
+        }
+        if (extensionFinished && dartFinished && isWristFinished) {
             lastWristSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Wrist);
             lastDartSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Dart);
             lastExtensionSetpoint = positions.get(positionNumber).getSetpoint(ArmMotor.Extension);
             positionNumber ++;
-            s_Arm.moveDart(0);
-            s_Arm.moveWrist(0);
-            s_Arm.extendArm(0);
+            //s_Arm.moveDart(0);
+            //s_Arm.moveWrist(0);
+            //s_Arm.extendArm(0);
         }
         
     } else {
+        //System.out.println("just something so we know we got there");
         s_Arm.moveDart(0);
         s_Arm.moveWrist(0);
         s_Arm.extendArm(0);
         if (wristSetpoint == Constants.AutoConstants.rotateWristNearest) {
             double halfwayPoint = ((Constants.AutoConstants.maxWristEncoder - Constants.AutoConstants.minimumWristEncoder) / 2) + Constants.AutoConstants.minimumWristEncoder;
-            wristSetpoint = s_Arm.getWristEncoder() > halfwayPoint ? Constants.AutoConstants.maxWristEncoder : Constants.AutoConstants.minimumWristEncoder;
+            System.out.println(halfwayPoint);
+            wristSetpoint = (s_Arm.getWristEncoder() < halfwayPoint )? Constants.AutoConstants.maxWristEncoder : Constants.AutoConstants.minimumWristEncoder;
         }
         s_Arm.setSetpoints(wristSetpoint, dartSetpoint, extensionSetpoint);
-    
+        /*
+        if (s_Arm.getDartEncoder() >= 100) {
+            s_Arm.moveDart(Constants.AutoConstants.maxDartSpeed);
+            if (s_Arm.getExtensionEncoder() > 0) {
+                s_Arm.extendArm(Constants.AutoConstants.maxExtensionSpeed * -1);
+            }
+        }
+        */
         //double speed = pidController.calculate(s_Arm.getWristEncoder(), setpoint) * -1;
         //s_Arm.moveWrist(speed);
-        if (wristSetpoint != -1) {
-        s_Arm.wristPID();
-        }
-        if (dartSetpoint != -1) {
-        s_Arm.dartPID();
-        }
-        if (extensionSetpoint != -1) {
-        s_Arm.extensionPID();
-        }
+        //if (s_Arm.getDartEncoder() < 100) {
+            if (wristSetpoint != -1) {
+            s_Arm.wristPID();
+            }
+            if (dartSetpoint != -1) {
+            s_Arm.dartPID();
+            }
+            if (extensionSetpoint != -1) {
+            s_Arm.extensionPID();
+            }
+        //}
     }
-    
    }
 
    @Override
@@ -142,6 +164,9 @@ public class PositionArm extends CommandBase{
     boolean isDartFinished = true;
     if (wristSetpoint != -1) {
         isWristFinished = s_Arm.isWristFinished();
+        if (!s_Arm.canWristMove() && !isWristFinished) {
+            return true;
+        }
     }
     if (dartSetpoint != -1) {
         isDartFinished = s_Arm.isDartFinished();
@@ -160,6 +185,15 @@ public class PositionArm extends CommandBase{
     s_Arm.moveWrist(0);
     s_Arm.extendArm(0);
     positionNumber = 0;
+    s_Arm.reset();
+    if (multiPosition){
+        ArmPosition position = positions.get(positions.size()-1);
+        wristSetpoint = position.getSetpoint(ArmMotor.Wrist);
+    }
+    else{
+        wristSetpoint = position.getSetpoint(ArmMotor.Wrist);
+    }
+
     System.out.println("yep it sure did end...");
    }
 }

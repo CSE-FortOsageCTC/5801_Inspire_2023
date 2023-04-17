@@ -76,4 +76,11 @@ public class AutoBalance extends CommandBase {
         }
         //Timer.delay(0.1);	
     }
+    
+    @Override
+    public void end(boolean isFinsished) {
+        s_Swerve.invertInvertGyro();
+        Timer.delay(0.1);
+        s_Swerve.invertInvertGyro();
+    }
 }

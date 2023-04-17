@@ -20,6 +20,6 @@ public class DriveBackward extends CommandBase {
 
     @Override
     public void execute(){
-        m_SwerveSubsystem.drive(new Translation2d(-0.24, 0).times(Constants.Swerve.maxSpeed), 0, true, true);
+        m_SwerveSubsystem.drive(new Translation2d(0.24, 0).times(Constants.Swerve.maxSpeed), 0, true, true);
     }
 }

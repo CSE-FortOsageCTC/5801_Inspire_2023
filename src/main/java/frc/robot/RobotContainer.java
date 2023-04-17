@@ -45,8 +45,8 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton autoAlign = new JoystickButton(driver, XboxController.Button.kX.value);
-  private final JoystickButton left18In = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton right18In = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  private final JoystickButton coneMode = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton cubeMode = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton autoBalance = new JoystickButton(driver, XboxController.Button.kB.value);
 
   /* Operator Buttons */
@@ -81,7 +81,7 @@ public class RobotContainer {
   public static boolean isCone = true;
   private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
-  private AutoAlign autoAlignCommand = new AutoAlign(s_Swerve, false, 0.15, 0.5);
+  private AutoAlign autoAlignCommand = new AutoAlign(s_Swerve, false, 0.25, 0.15);
   private AutoBalance autoBalanceCommand = new AutoBalance(s_Swerve, true, true);
 
   /* Paths */
@@ -104,6 +104,7 @@ public class RobotContainer {
     /* Auto Chooser Setup */
     m_autoChooser.setDefaultOption("None", null);
     m_autoChooser.addOption("A1C", new A1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("A9B1A9B2A8", new A9B1A9B2A8(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A2C", new A2C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A2C Mobility", new A2MC(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A2C Traverse First", new A2CTraverse(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
@@ -116,14 +117,18 @@ public class RobotContainer {
     m_autoChooser.addOption("AIAuto", new InstantCommand(() -> generateAI()));
     //m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     SmartDashboard.putData("Auto Chooser", m_autoChooser);
+
+    SmartDashboard.putNumber("Starting Node", 9);
+    SmartDashboard.putNumber("Piece Number", 0);
+    SmartDashboard.putBoolean("Charge Station", false);
   }
 
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.gyro180()));
     autoAlign.whileTrue(autoAlignCommand);
-    left18In.onTrue(s_Swerve.followTrajectoryCommand(Left18, true));
-    right18In.onTrue(s_Swerve.followTrajectoryCommand(Right18, true));
+    coneMode.onTrue(new InstantCommand(() -> setIsCone()));
+    cubeMode.onTrue(new InstantCommand(() -> setIsCube()));
     autoBalance.whileTrue(autoBalanceCommand);
 
     /* Operator Buttons */
@@ -131,16 +136,21 @@ public class RobotContainer {
     ArmPosition mid = ArmPosition.Mid;
     ArmPosition high = ArmPosition.High;
     ArmPosition highSequence = ArmPosition.HighSequence;
-    xButton.whileTrue(new PositionArm(s_ArmSubsystem, List.of(midSequence, mid)));
-    yButton.whileTrue(new PositionArm(s_ArmSubsystem, List.of(midSequence, highSequence, high)));
-    aButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Floor));
-    bButton.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.Travel));
+    ArmPosition travel = ArmPosition.Travel;
+    ArmPosition travelSequence = ArmPosition.TravelSequence;
+    ArmPosition floorSequence = ArmPosition.FloorSequence;
+    ArmPosition floor = ArmPosition.Floor;
+
+    xButton.whileTrue(new PositionArm(s_ArmSubsystem, mid));
+    yButton.whileTrue(new PositionArm(s_ArmSubsystem, high));
+    aButton.whileTrue(new PositionArm(s_ArmSubsystem, List.of(floorSequence, floor)));
+    bButton.whileTrue(new PositionArm(s_ArmSubsystem, List.of(travelSequence, travel)));
     startButton.onTrue(new InstantCommand(() -> s_ArmSubsystem.outputArmValues()));
     //leftBumper.onTrue(new InstantCommand(() -> setIsCone()));
     //rightBumper.onTrue(new InstantCommand(() -> setIsCube()));
-    leftBumper.onTrue(new PositionArm(s_ArmSubsystem, ArmPosition.minimumWrist));
-    rightBumper.onTrue(new PositionArm(s_ArmSubsystem, ArmPosition.maxWrist));
-    backButton.onTrue(new InstantCommand(() -> s_LEDSubsystem.setSwitchableChannel()));
+    leftBumper.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.minimumWrist));
+    rightBumper.whileTrue(new PositionArm(s_ArmSubsystem, ArmPosition.maxWrist));
+    backButton.whileTrue(new InstantCommand(() -> s_LEDSubsystem.setSwitchableChannel()));
 
     /* D-Pad Driver Input Detection */
     dpadUpDriver.whileTrue(dPadPOV(0));

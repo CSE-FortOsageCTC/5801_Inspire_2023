@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.SlewRateClass;
 import frc.robot.subsystems.ArmSubsystem;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -10,6 +12,8 @@ public class TeleopArm extends CommandBase {
     
     private ArmSubsystem s_Arm;
     private Joystick controller;
+
+    private SlewRateLimiter dartLimiter = new SlewRateLimiter(3);
 
     /**
      * Driver control
@@ -34,9 +38,9 @@ public class TeleopArm extends CommandBase {
         rightYAxis = (Math.abs(rightYAxis) < Constants.stickDeadband) ? 0 : rightYAxis;
         rightXAxis = (Math.abs(rightXAxis) < Constants.stickDeadband) ? 0 : rightXAxis;
 
-        s_Arm.moveDart(leftYAxis * -0.5);
-        s_Arm.extendArm(rightYAxis * 1);
+        s_Arm.moveDart(dartLimiter.calculate(rightYAxis) * -1);
+        s_Arm.extendArm(leftYAxis * 1);
         //s_Arm.moveElbow(rightYAxis * 0.7);
-        s_Arm.moveWrist(rightXAxis * 0.2);
+        s_Arm.moveWrist(rightXAxis * 0.8);
     }
 }

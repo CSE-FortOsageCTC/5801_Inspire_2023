@@ -14,7 +14,7 @@ import frc.robot.subsystems.Swerve;
 /**
  * This class detects the "april tag" and positions the robot infront of the node/April Tag
  */
-public class AutoAlign extends CommandBase {
+public class AutoAutoAlign extends CommandBase {
 
     private PIDController yTranslationPidController;
     private PIDController xTranslationPidController;
@@ -33,10 +33,10 @@ public class AutoAlign extends CommandBase {
      * 
      * @param s_Swerve swerve subsystem to be aligned with the april tag
      */
-    public AutoAlign(Swerve s_Swerve, boolean isCone, double maxXSpeed, double maxYSpeed) {
+    public AutoAutoAlign(Swerve s_Swerve, boolean isCone, double maxXSpeed, double maxYSpeed) {
         limelight = new Limelight(isCone);
         this.s_Swerve = s_Swerve;
-        this.autoUtil = new AutoRotateUtil(s_Swerve, 0);
+        this.autoUtil = new AutoRotateUtil(s_Swerve, 180);
         addRequirements(s_Swerve);
         this.isCone = isCone;
         this.maxXSpeed = maxXSpeed;
@@ -122,7 +122,7 @@ public class AutoAlign extends CommandBase {
         SmartDashboard.putNumber("AlignYSpeed", ySpeed);
 
         // moves the swerve subsystem
-        Translation2d translation = new Translation2d(-xSpeed, -ySpeed).times(Constants.Swerve.maxSpeed);
+        Translation2d translation = new Translation2d(xSpeed, ySpeed).times(Constants.Swerve.maxSpeed);
         double rotation = angularSpeed * Constants.Swerve.maxAngularVelocity;
         s_Swerve.drive(translation, rotation, true, true);
 
@@ -150,8 +150,8 @@ public class AutoAlign extends CommandBase {
         limelight.updateIsCone(false); // Switches pipeline to turn off Green LEDs
         xTranslationPidController.reset();
         yTranslationPidController.reset();
-        s_Swerve.invertInvertGyro();
-        Timer.delay(0.1);
-        s_Swerve.invertInvertGyro();
+        //s_Swerve.invertInvertGyro();
+        //Timer.delay(0.1);
+        //s_Swerve.invertInvertGyro();
     }
 }

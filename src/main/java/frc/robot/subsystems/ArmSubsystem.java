@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.SlewRateClass;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 
@@ -26,6 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
     //private final CANSparkMax armSlaveMotor = new CANSparkMax(11, MotorType.kBrushless);
     //private final TalonSRX elbowMasterMotor = new TalonSRX(13);
     //private final VictorSPX elbowSlaveMotor = new VictorSPX(19);
+    //private SlewRateClass dartLimiter = new SlewRateClass(1000);
     private final TalonSRX wristMotor = new TalonSRX(23);
     private final TalonSRX extensionMotor = new TalonSRX(22);
 
@@ -33,6 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
     //private final PIDController elbowPID = new PIDController(0, 0, 0);
     private final PIDController wristPID = new PIDController(0, 0, 0);
     private final PIDController extensionPID = new PIDController(0, 0, 0);
+    private final PIDController inverseDartPID = new PIDController(0, 0, 0);
 
     private final AnalogEncoder dartEncoder = new AnalogEncoder(0);
     //private final AnalogEncoder elbowEncoder = new AnalogEncoder(1);
@@ -42,6 +46,9 @@ public class ArmSubsystem extends SubsystemBase {
     private final ArmFeedforward dartFeedforward = new ArmFeedforward(0, 0, 0);
     private final ArmFeedforward wristFeedforward = new ArmFeedforward(0, 0, 0);
 
+    private boolean isWristUp = false;
+    private boolean isWristDown = true;
+
     /*
      * Restors defaults for redundancy
      * Sets slave motor to inversely follow the master motor
@@ -50,9 +57,15 @@ public class ArmSubsystem extends SubsystemBase {
         dartMotor.restoreFactoryDefaults();
         //armSlaveMotor.restoreFactoryDefaults();
         //armSlaveMotor.follow(armMasterMotor, true);
+        dartMotor.setSmartCurrentLimit(80);
+        dartMotor.setOpenLoopRampRate(80);
+        dartMotor.burnFlash();
         
         extensionMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         extensionMotor.setNeutralMode(NeutralMode.Brake);
+        wristMotor.setNeutralMode(NeutralMode.Brake);
+
+        inverseDartPID.setPID(Constants.AutoConstants.dartP, Constants.AutoConstants.dartI, Constants.AutoConstants.dartD);
 
         /*
         elbowMasterMotor.setNeutralMode(NeutralMode.Brake);
@@ -65,14 +78,15 @@ public class ArmSubsystem extends SubsystemBase {
         dartPID.setTolerance(0.005); //0.015
         wristPID.setTolerance(45); //0.05
         //elbowPID.setTolerance(0.015); //0.025
-        extensionPID.setTolerance(1500); //1500
+        extensionPID.setTolerance(150); //1500
 
 
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Dart Encoder Value", getDartEncoder());
+        //SmartDashboard.putNumber("Dart Encoder Value", dartEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Dart Digital Encoder Value", getDartEncoder());
         //SmartDashboard.putNumber("Elbow Encoder Value", elbowEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Wrist Encoder Value", getWristEncoder());
         SmartDashboard.putNumber("Extension Encoder Value", getExtensionEncoder());
@@ -80,11 +94,40 @@ public class ArmSubsystem extends SubsystemBase {
         if (extensionLimitSwitch) {
             extensionMotor.setSelectedSensorPosition(0);
         }
+
         boolean dartLimitSwitch = dartMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen).isPressed();
         if (dartLimitSwitch) {
             //dartMotor.getEncoder().setPosition(0);
         }
-        //SmartDashboard.putBoolean("Dart Limite Switch", dartLimitSwitch);
+        boolean wristFwdLimitSwitch = 1 == wristMotor.isFwdLimitSwitchClosed();
+        boolean wristRevLimitSwitch = 1 == wristMotor.isRevLimitSwitchClosed();
+        if (wristFwdLimitSwitch) {
+            wristMotor.setSelectedSensorPosition(Constants.AutoConstants.minimumWristEncoder);
+        }
+        if (wristRevLimitSwitch) {
+            wristMotor.setSelectedSensorPosition(Constants.AutoConstants.maxWristEncoder);
+        }
+        if (getWristEncoder() < (Constants.AutoConstants.maxWristEncoder + 300)) {
+            isWristDown = true;
+            isWristUp = false;
+            //System.out.println("WRIST IS SET TO DOWN");
+        }else if (getWristEncoder() > (Constants.AutoConstants.minimumWristEncoder - 550)) {
+            isWristUp = true;
+            isWristDown = false;
+            //System.out.println("WRIST IS SET TO UP");
+        } else {
+            isWristDown = false;
+            isWristUp = false;
+            //System.out.println("WRIST IS SIDEWAYS");
+        }
+        SmartDashboard.putBoolean("is wrist Down", isWristDown);
+        SmartDashboard.putBoolean("is wrist Up", isWristUp);
+    }
+
+    public void reset() {
+        wristPID.reset();
+        extensionPID.reset();
+        dartPID.reset();
     }
 
     //Moves arm motors at a tenth of the input speed
@@ -92,22 +135,31 @@ public class ArmSubsystem extends SubsystemBase {
        // if (getExtensionEncoder() < 0 /* CHANGE LATER */) {
         //    return;
         //}
-
+        if (getExtensionEncoder() > 448 && getDartEncoder() < 27.999 && speed < 0 && !isWristDown) {
+            speed = 0;
+            //System.out.println("WristUp");
+        }
+        if (getExtensionEncoder() > 448 && getDartEncoder() < 21.523704528808594 && speed < 0 && isWristDown) {
+            speed = 0;
+        }
         if (getDartEncoder() > Constants.AutoConstants.maxDartEncoder && speed > 0) {
             speed = 0;
         }
-        if (getDartEncoder() > Constants.AutoConstants.maxDartEncoder - 3 && speed > 0) {
-            speed = 0.1;
+        if (getDartEncoder() > Constants.AutoConstants.maxDartEncoder - 10 && speed > 0) {
+            speed = 0.15;
         }
         if (getDartEncoder() < 5 && speed < 0) {
-            speed = -0.1;
+            speed = -0.15;
         }
         if (getDartEncoder() < 0.5 && speed < 0) {
             speed = 0;
         }
-
+        //double dartSlewSpeed = dartLimiter.calculate(speed);
+        //SmartDashboard.putNumber("Dart Speed", speed);
+        //SmartDashboard.putNumber("Dart Slew Speed", dartSlewSpeed);
+        //dartMotor.set(dartSlewSpeed);
         dartMotor.set(speed);
-        SmartDashboard.putNumber("Dart Speed", speed);
+        //SmartDashboard.putNumber("Dart Speed", speed);
     }
 
     /*
@@ -119,28 +171,45 @@ public class ArmSubsystem extends SubsystemBase {
 
     //Moves wrist motor
     public void moveWrist(double speed) {
-        SmartDashboard.putNumber("Wrist speed 2", speed);
-        /*
-        if (getElbowEncoder() < 0) { //TODO: change number to actual encoder position
-            return;
-        }*/
-        if ((getWristEncoder() < Constants.AutoConstants.maxWristEncoder && speed < 0) || (getWristEncoder() > Constants.AutoConstants.minimumWristEncoder && speed > 0)) {
-            wristMotor.set(ControlMode.PercentOutput, 0);
-            return;
+        //SmartDashboard.putNumber("Wrist speed 2", speed);
+        //System.out.println(speed);
+        // if (getDartEncoder() > 0.675) {
+        //     speed = 0;
+        // }
+        //isWristDown = false;
+        //isWristUp = false;
+        if (getWristEncoder() < Constants.AutoConstants.maxWristEncoder && speed <= 0) {
+            //System.out.println("WristDown one");
+            speed = 0;
+            //isWristDown = true;
+        }
+        if (getWristEncoder() > Constants.AutoConstants.minimumWristEncoder && speed >= 0) {
+            //System.out.println("WristUp one");
+            speed = 0;
+            //isWristUp = true;
         }
         wristMotor.set(ControlMode.PercentOutput, speed);
     }
 
     //Moves elbow extension motor
     public void extendArm(double speed) {
-        if (getDartEncoder() < 27.4 /* Change Later */) {
-            
-            return;
+        //if (getDartEncoder() < 0 && speed < 0) {}
+        //System.out.println(getDartEncoder());
+        
+        if (getDartEncoder() < 27.999 && speed < 0 && !isWristDown) {
+           System.out.println("WARNING: DART ANGLE TOO LOW!");
+           //System.out.println("Is Wrist Down is " + isWristDown + "     Is Wrist Up is " + isWristUp);
+           speed = 0;
+        }
+        if (getDartEncoder() < 21.523704528808594 && speed < 0 && isWristDown) {
+           System.out.println("WARNING: DART ANGLE TOO LOW (wrist down)!");
+           speed = 0;
         }
         if (getExtensionEncoder() > Constants.AutoConstants.maxExtensionEncoder - Constants.AutoConstants.minExtensionEncoder && speed < 0) {
             speed = -0.12;
         }
         if (getExtensionEncoder() > Constants.AutoConstants.maxExtensionEncoder && speed < 0) {
+            System.out.println("WARNING: DART ANGLE TOO HIGH!");
             speed = 0;
         }
         if (getExtensionEncoder() < Constants.AutoConstants.minExtensionEncoder && speed > 0) {
@@ -164,12 +233,12 @@ public class ArmSubsystem extends SubsystemBase {
     */
 
     public boolean feedForwardExtension(double position, boolean isPositive) {
-        if (isPositive && position < getExtensionEncoder()) {
-            extendArm(Constants.AutoConstants.maxExtensionSpeed); //may need to multiply by -1
+        if (isPositive && position > getExtensionEncoder()) {
+            extendArm(-Constants.AutoConstants.maxExtensionSpeed); //may need to multiply by -1
             return false;
         }
-        if (!isPositive && position > getExtensionEncoder()) {
-            extendArm(Constants.AutoConstants.maxExtensionSpeed * -1); //may need to remove -1
+        if (!isPositive && position < getExtensionEncoder()) {
+            extendArm(Constants.AutoConstants.maxExtensionSpeed); //may need to remove -1
             return false;
         }
         return true;
@@ -188,15 +257,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public boolean feedForwardDart(double position, boolean isPositive) {
-        System.out.println("FeedForwardDart Start");
         if (isPositive && position > getDartEncoder()) {
-            moveDart(Constants.AutoConstants.maxDartSpeed); //may need to multiply by -1
-            System.out.println("FeedForwardDart1");
+            moveDart(Constants.AutoConstants.maxDartSpeed * 0.6); //may need to multiply by -1
             return false;
         }
         if (!isPositive && position < getDartEncoder()) {
-            moveDart(-Constants.AutoConstants.maxDartSpeed); //may need to remove -1
-            System.out.println("FeedForwardDart2");
+            moveDart(-Constants.AutoConstants.maxDartSpeed * 0.6); //may need to remove -1
             return false;
         }
         return true;
@@ -204,6 +270,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public double getDartEncoder() {
         return dartMotor.getEncoder().getPosition();
+        //return dartEncoder.getAbsolutePosition();
     }
 
     /*
@@ -227,11 +294,35 @@ public class ArmSubsystem extends SubsystemBase {
     public void dartPID(/*, double feedbackSetpoint*/) {
         dartPID.setPID(SmartDashboard.getNumber("Dart P Value", 0), SmartDashboard.getNumber("Dart I Value", 0), SmartDashboard.getNumber("Dart D Value", 0));
         //shoulderPID.setPID(Constants.AutoConstants.shoulderP, Constants.AutoConstants.shoulderI, Constants.AutoConstants.shoulderD);
+
+        double initialSpeed = inverseDartPID.calculate(getDartEncoder());
+        
         double speed = dartPID.calculate(getDartEncoder());
-        speed = MathUtil.clamp(speed, -1, 1);
-        dartMotor.set(speed/*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
+        speed = MathUtil.clamp(speed, -1, 0.6);
+        //initialSpeed = MathUtil.clamp(initialSpeed, -1, 1);
+        //if (initialSpeed < 0.15) {
+        //    initialSpeed = 0.15;
+        //}
+        //if (Math.abs(initialSpeed) < 0.5 && Math.abs(speed) == 1) {
+        //    if (speed < 0) {
+        //        speed = -Math.abs(initialSpeed);
+        //    } else {
+        //        speed = Math.abs(initialSpeed);
+        //    }
+        //}
+        moveDart(speed/*+ shoulderFeedforward.calculate(feedbackSetpoint, setpoint)*/);
     }
 
+    public void setInitial() {
+        inverseDartPID.setSetpoint(getDartEncoder());
+    }
+
+    public boolean canWristMove () {
+        // if (getDartEncoder() < 25) {
+        //     return false;
+        // }
+        return true;
+    }
     /*
      * Moves elbow motor to an input setpoint with PID method
      * PID values determined from Smartdashboard for testing
@@ -262,6 +353,7 @@ public class ArmSubsystem extends SubsystemBase {
         speed = MathUtil.clamp(speed, -.75, .75);
         moveWrist(speed);
         SmartDashboard.putNumber("Wrist Setpoint", wristPID.getSetpoint());
+        SmartDashboard.putNumber("wrist speed", speed);
     }
 
     /*
@@ -273,7 +365,8 @@ public class ArmSubsystem extends SubsystemBase {
         //extensionPID.setPID(Constants.AutoConstants.extensionP, Constants.AutoConstants.extensionI, Constants.AutoConstants.extensionD);
         double speed = extensionPID.calculate(extensionMotor.getSelectedSensorPosition());
         speed = MathUtil.clamp(speed, -1, 1);
-        extensionMotor.set(ControlMode.PercentOutput, -speed);
+        //System.out.println("Extension PID " + speed);
+        extendArm(-speed);
     }
 
     public void zeroExtensionEncoder() {
@@ -282,7 +375,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void outputArmValues() {
 
-        System.out.println(String.valueOf(getDartEncoder()) + ", "/* + String.valueOf(getElbowEncoder()) + ", " */+ String.valueOf(getExtensionEncoder()) + ", " + (getWristEncoder() > 0.8 ? "maxWristEncoder" : "minimumWristEncoder"));    
+        System.out.println(String.valueOf(getDartEncoder()) + ", "/* + String.valueOf(getElbowEncoder()) + ", " */+ String.valueOf(getExtensionEncoder()) + ", " + -1/*(getWristEncoder() > 0.8 ? "maxWristEncoder" : "minimumWristEncoder")*/);    
     
     }
 
