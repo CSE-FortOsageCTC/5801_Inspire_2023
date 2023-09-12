@@ -158,17 +158,19 @@ public final class Constants {
             TravelSequence(-1, minExtensionEncoder, -1),
             Floor(20, 1906.0,-1),//Changed already           0.651                   0.4283
             FloorCube(28.285499572753906, 2518.0, -1),
-            FloorSequence(25, 0, -1),
+            FloorSequence(30.856, 0, -1),
             Mid(111.59651184082031, 1443.0, -1), //0.360                  0.4283
             MidSequence(-1, 0.0, -1),
-            MidPlace(0.5888974502237166, 1444.0, -1),
+            AutoMidSequence1(111.59651184082031, 0.0, maxWristEncoder),
+            AutoMidSequence(111.59651184082031, 0.0, -1),
+            MidPlace(85, 1443.0, -1),
             High(132, 4119.0, -1), //0.502                 0.4283
             HighSequence(132, -1, maxWristEncoder),
             HighSequence1(50, -1, -1),
             HighPlace(106.73999786376953, 4119.0, -1),
             InverseFloor(0.905, -58297, -1),
 
-            AutoWristRotate(25,0,maxWristEncoder),
+            AutoWristRotate(-1, 0, maxWristEncoder),
 
             minimumWrist(-1, -1, minimumWristEncoder),
             maxWrist(-1, -1, maxWristEncoder);            

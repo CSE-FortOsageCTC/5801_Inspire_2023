@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -20,6 +21,7 @@ import com.revrobotics.EncoderType;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -46,6 +48,8 @@ public class ArmSubsystem extends SubsystemBase {
     private final ArmFeedforward dartFeedforward = new ArmFeedforward(0, 0, 0);
     private final ArmFeedforward wristFeedforward = new ArmFeedforward(0, 0, 0);
 
+    private final DigitalInput dartUpperLimit = new DigitalInput(0);
+
     private boolean isWristUp = false;
     private boolean isWristDown = true;
 
@@ -59,6 +63,9 @@ public class ArmSubsystem extends SubsystemBase {
         //armSlaveMotor.follow(armMasterMotor, true);
         dartMotor.setSmartCurrentLimit(80);
         dartMotor.setOpenLoopRampRate(80);
+        dartMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 25);
+        dartMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50);
+        dartMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
         dartMotor.burnFlash();
         
         extensionMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
@@ -120,6 +127,7 @@ public class ArmSubsystem extends SubsystemBase {
             isWristUp = false;
             //System.out.println("WRIST IS SIDEWAYS");
         }
+
         SmartDashboard.putBoolean("is wrist Down", isWristDown);
         SmartDashboard.putBoolean("is wrist Up", isWristUp);
     }

@@ -45,7 +45,7 @@ public class AutoBalSetupInvert extends CommandBase {
     public void execute(){        
         
         SmartDashboard.putBoolean("auto", true); //displaying pitch value in degrees on dashboard
-        translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed * 0.33);
+        translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed * 0.25);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);
     }
