@@ -47,8 +47,7 @@ public class N9B1N9B2 extends SequentialCommandGroup {
         new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5),//place cone on top bar
         new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
 
-        drive.followTrajectoryCommand(A9B2, true).alongWith(new PositionArm(s_ArmSubsystem, List.of(midSequence, floorSequence, floor))).withTimeout(1),
-        new InstantCommand(() -> drive.invertInvertGyro())
+        drive.followTrajectoryCommand(A9B2, true).alongWith(new PositionArm(s_ArmSubsystem, List.of(midSequence, floorSequence, floor))).withTimeout(1)
 
         // new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeInTeleopConstant).withTimeout(0.000001),
         // new DriveForward(drive).withTimeout(.5),//pick up field cone

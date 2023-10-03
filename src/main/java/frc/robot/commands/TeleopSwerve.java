@@ -27,10 +27,7 @@ public class TeleopSwerve extends CommandBase {
 	private SlewRateLimiter rotationLimiter = new SlewRateLimiter(1.8); 
     private SlewRateLimiter throttleLimiter = new SlewRateLimiter(2); 
 
-    @Override
-    public void initialize() {
-        s_Swerve.invertGyro();
-    }
+
     /**
      * Driver control
      */

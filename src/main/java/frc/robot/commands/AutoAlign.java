@@ -150,8 +150,5 @@ public class AutoAlign extends CommandBase {
         limelight.updateIsCone(false); // Switches pipeline to turn off Green LEDs
         xTranslationPidController.reset();
         yTranslationPidController.reset();
-        s_Swerve.invertInvertGyro();
-        Timer.delay(0.1);
-        s_Swerve.invertInvertGyro();
     }
 }
