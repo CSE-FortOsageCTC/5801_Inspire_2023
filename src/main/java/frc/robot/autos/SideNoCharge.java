@@ -43,7 +43,7 @@ public class SideNoCharge extends SequentialCommandGroup {
       new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
       //new TraverseChargeStation(drive, true, true, false, false, false, 0).alongWith(new PositionArm(s_ArmSubsystem, List.of(midSequence, travelSequence, travel))).withTimeout(6),
       //new WaitCommand(0.25),
-      new DriveBackward(drive).withTimeout(3.25)
+      new DriveForward(drive).withTimeout(3.25)
     //   new AutoBalSetupInvert(drive, true, true).alongWith(new PositionArm(s_ArmSubsystem, List.of(midSequence, travelSequence, travel)).withDartSpeed(1)).withTimeout(2.5),
     //   new AutoBalance(drive, true, true)
     );

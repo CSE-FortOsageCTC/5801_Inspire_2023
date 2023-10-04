@@ -46,8 +46,8 @@ public class TeleopSwerve extends CommandBase {
 
     @Override
     public void execute() {
-        double yAxis = -controller.getRawAxis(translationAxis);
-        double xAxis = -controller.getRawAxis(strafeAxis);
+        double yAxis = controller.getRawAxis(translationAxis);
+        double xAxis = controller.getRawAxis(strafeAxis);
         double rAxis = -controller.getRawAxis(rotationAxis);
         double throttleAxis = controller.getRawAxis(throttle);
         
@@ -57,7 +57,7 @@ public class TeleopSwerve extends CommandBase {
         rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
         throttleAxis = (Math.abs(throttleAxis) < Constants.stickDeadband) ? .2 : throttleAxis;
 
-        translation = new Translation2d(yAxis, xAxis).times(throttleLimiter.calculate(throttleAxis) * (5));
+        translation = new Translation2d(yAxis, xAxis).times(throttleLimiter.calculate(throttleAxis) * (Constants.Swerve.maxSpeed));
         rotation = rotationLimiter.calculate(rAxis) * (throttleLimiter.calculate(throttleAxis) * (Constants.Swerve.maxAngularVelocity));
         s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
     }

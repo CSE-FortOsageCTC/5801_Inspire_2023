@@ -122,7 +122,7 @@ public class AutoAlign extends CommandBase {
         SmartDashboard.putNumber("AlignYSpeed", ySpeed);
 
         // moves the swerve subsystem
-        Translation2d translation = new Translation2d(-xSpeed, -ySpeed).times(Constants.Swerve.maxSpeed);
+        Translation2d translation = new Translation2d(-xSpeed, -ySpeed).times(Constants.Swerve.maxSpeed); 
         double rotation = angularSpeed * Constants.Swerve.maxAngularVelocity;
         s_Swerve.drive(translation, rotation, true, true);
 
