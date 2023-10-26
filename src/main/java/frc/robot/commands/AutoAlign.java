@@ -61,7 +61,7 @@ public class AutoAlign extends CommandBase {
 
         // puts the value of P,I and D onto the SmartDashboard
         // Will remove later
-        SmartDashboard.putNumber("AlignP", 0.035);
+        SmartDashboard.putNumber("AlignP", 0.07);
         SmartDashboard.putNumber("AlignI", 0);
         SmartDashboard.putNumber("AlignD", 0.00035);
 

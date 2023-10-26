@@ -55,8 +55,8 @@ public class AutoBalance extends CommandBase {
         double yaw = ((s_Swerve.gyro.getYaw() % 360) + 360) % 360;
         boolean isForward = yaw > 270 || yaw < 90;
         boolean isLeft = yaw > 0 && yaw < 180;
-        xAxisRate = Math.sin(pitchAngleRadians) * (isForward ? -1 : 1);
-        yAxisRate = Math.sin(rollAngleRadians) * (isLeft ? -1 : 1);
+        xAxisRate = Math.sin(pitchAngleRadians) * (isForward ? 1 : -1);
+        yAxisRate = Math.sin(rollAngleRadians) * (isLeft ? 1 : -1);
 
         /*if (yAxisRate < 0.15 && yAxisRate > 0){
             yAxisRate = 0.15;
@@ -68,7 +68,7 @@ public class AutoBalance extends CommandBase {
             
         }*/
         try {
-            translation = new Translation2d(yAxisRate + xAxisRate, 0).times(Constants.Swerve.maxSpeed * 0.45);
+            translation = new Translation2d(xAxisRate, yAxisRate).times(Constants.Swerve.maxSpeed * 0.45);
             s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         } catch( RuntimeException ex ) {
             String err_string = "Drive system error:  " + ex.getMessage();

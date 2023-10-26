@@ -31,7 +31,7 @@ public class N2CTraverseFloor extends SequentialCommandGroup {
     ArmPosition mid = ArmPosition.Mid;
     
     addCommands(
-      new InstantCommand(() -> drive.zeroGyro()),
+      new InstantCommand(() -> drive.gyro180()),
       new TraverseChargeStation(drive, true, true, false, false, false, 0).alongWith(new PositionArm(s_ArmSubsystem, List.of(travelSequence, travel))).withTimeout(5.35),
       new WaitCommand(0.25),
       new AutoBalanceSetup(drive, true, true).withTimeout(2.8),

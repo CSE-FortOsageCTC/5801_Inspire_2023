@@ -29,7 +29,7 @@ public class N2C extends SequentialCommandGroup {
     ArmPosition midSequence = ArmPosition.MidSequence;
     
     addCommands(
-      new InstantCommand(() -> drive.gyro180()),
+      new InstantCommand(() -> drive.zeroGyro()),
       //new PositionArm(s_ArmSubsystem, ArmPosition.High).withTimeout(3),
       //new PositionArm(s_ArmSubsystem, ArmPosition.HighPlace).withTimeout(1.5),
       ////new WaitCommand(0.2),

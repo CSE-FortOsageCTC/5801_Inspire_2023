@@ -20,7 +20,7 @@ public final class Constants {
         
     
     public static final double coneLimelightAreaSetpoint = .27;
-    public static final double cubeLimelightAreaSetpoint = 7;
+    public static final double cubeLimelightAreaSetpoint = 2.6;
     public static final int conePipeline = 1;
     public static final int cubePipeline = 2;
 
@@ -75,7 +75,7 @@ public final class Constants {
         public static final double driveKA = (0.27 / 12);
 
         /* Swerve Profiling Values */
-        public static final double maxSpeed = 4.5; //meters per second (default = 4.5)
+        public static final double maxSpeed = 10; //meters per second (default = 4.5)
         public static final double maxAngularVelocity = 6;    //8;   default is 11.5
 
         /* Neutral Modes */

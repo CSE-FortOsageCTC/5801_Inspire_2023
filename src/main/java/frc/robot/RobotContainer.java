@@ -60,15 +60,15 @@ public class RobotContainer {
   private final JoystickButton backButton = new JoystickButton(operator, XboxController.Button.kBack.value);
 
   /* D-Pad POV Driver */
-  POVButton dpadUpDriver = new POVButton(driver, 0);
+  POVButton dpadUpDriver = new POVButton(driver, 180);
   POVButton dpadRightDriver = new POVButton(driver, 90);
-  POVButton dpadDownDriver = new POVButton(driver, 180);
+  POVButton dpadDownDriver = new POVButton(driver, 0);
   POVButton dpadLeftDriver = new POVButton(driver, 270);
   
   /* D-Pad POV Operator */
-  POVButton dpadUpOp = new POVButton(operator, 0);
+  POVButton dpadUpOp = new POVButton(operator, 180);
   POVButton dpadRightOp = new POVButton(operator, 90);
-  POVButton dpadDownOp = new POVButton(operator, 180);
+  POVButton dpadDownOp = new POVButton(operator, 0);
   POVButton dpadLeftOp = new POVButton(operator, 270);
 
   /* Subsystems */
@@ -128,7 +128,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.gyro180()));
     autoAlign.whileTrue(autoAlignCommand);
     coneMode.onTrue(new InstantCommand(() -> setIsCone()));
     cubeMode.onTrue(new InstantCommand(() -> setIsCube()));

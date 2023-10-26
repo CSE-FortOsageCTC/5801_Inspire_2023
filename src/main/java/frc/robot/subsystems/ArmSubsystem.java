@@ -70,7 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
         
         extensionMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
         extensionMotor.setNeutralMode(NeutralMode.Brake);
-        wristMotor.setNeutralMode(NeutralMode.Brake);
+        wristMotor.setNeutralMode(NeutralMode.Brake); // Potentially not in "Brake" mode
 
         inverseDartPID.setPID(Constants.AutoConstants.dartP, Constants.AutoConstants.dartI, Constants.AutoConstants.dartD);
 
