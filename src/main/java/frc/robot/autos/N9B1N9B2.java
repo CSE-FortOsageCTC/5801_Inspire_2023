@@ -42,9 +42,9 @@ public class N9B1N9B2 extends SequentialCommandGroup {
 
         drive.followTrajectoryCommand(B1A9, true).alongWith(new PositionArm(s_ArmSubsystem, ArmPosition.High)).withTimeout(4),
 
-        new AutoAutoAlign(drive, true, 0.35, 0.25).withTimeout(2),
+        new AutoAutoAlign(drive, true, 0.35, 0.25).withTimeout(2), // Might need to change to Normal AutoAlign
         new PositionArm(s_ArmSubsystem, ArmPosition.HighPlace).withTimeout(1),
-        new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5),//place cone on top bar
+        new IntakeAuto(s_IntakeSubsystem, Constants.AutoConstants.intakeOutAutoConstant).withTimeout(.5), //place cone on top bar
         new IntakeAuto(s_IntakeSubsystem, 0).withTimeout(0.000001),
 
         drive.followTrajectoryCommand(A9B2, true).alongWith(new PositionArm(s_ArmSubsystem, List.of(midSequence, floorSequence, floor))).withTimeout(1)

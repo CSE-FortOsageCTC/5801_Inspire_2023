@@ -67,7 +67,7 @@ public class TraverseChargeStation extends CommandBase {
             hasLeveled = true;
         }
 
-        translation = new Translation2d(1, 0).times(Constants.Swerve.maxSpeed * 0.25);
+        translation = new Translation2d(-1, 0).times(Constants.Swerve.maxSpeed * 0.25);
                 s_Swerve.drive(translation, 0.0, fieldRelative, openLoop);
         Timer.delay(0.005);
     }
