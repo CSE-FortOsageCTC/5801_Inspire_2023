@@ -1,0 +1,865 @@
+{
+  "tabPane": [
+    {
+      "title": "SmartDashboard",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "9,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Extras",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AutoAlignSetpoint",
+                  "_title": "AutoAlignSetpoint",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Is Ended",
+                  "_title": "Is Ended",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/PPSwerveControllerCommand/xErrorMeters",
+                  "_title": "PPSwerveControllerCommand/xErrorMeters",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/PPSwerveControllerCommand/yErrorMeters",
+                  "_title": "PPSwerveControllerCommand/yErrorMeters",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/PPSwerveControllerCommand/rotationErrorDegrees",
+                  "_title": "PPSwerveControllerCommand/rotationErrorDegrees",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/auto",
+                  "_title": "auto",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/AtSetPoint",
+                  "_title": "AtSetPoint",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/ThetaP",
+                  "_title": "ThetaP",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/ThetaI",
+                  "_title": "ThetaI",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/ThetaD",
+                  "_title": "ThetaD",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Areavalue",
+                  "_title": "Areavalue",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "List Layout",
+                  "_title": "AutoAlign",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": [
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/P",
+                      "_title": "P",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/i",
+                      "_title": "i",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/d",
+                      "_title": "d",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                {
+                  "_type": "List Layout",
+                  "_title": "Limelight Tuning",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": [
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/AngularValue",
+                      "_title": "AngularValue",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/Xvalue",
+                      "_title": "Xvalue",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/limelight-three_Interface",
+                      "_title": "limelight-three_Interface",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/limelight-three_Stream",
+                      "_title": "limelight-three_Stream",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/limelight-three_PipelineName",
+                      "_title": "limelight-three_PipelineName",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/limelight_PipelineName",
+                      "_title": "limelight_PipelineName",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/limelight_Interface",
+                      "_title": "limelight_Interface",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/limelight_Stream",
+                      "_title": "limelight_Stream",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                {
+                  "_type": "List Layout",
+                  "_title": "List Layout",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": [
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/BalP",
+                      "_title": "BalP",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/BalI",
+                      "_title": "BalI",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/BalD",
+                      "_title": "BalD",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                {
+                  "_type": "List Layout",
+                  "_title": "AutoRotateUtil",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": [
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/kP",
+                      "_title": "kP",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/kI",
+                      "_title": "kI",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/kD",
+                      "_title": "kD",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/YAxisRate",
+                  "_title": "YAxisRate",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 3 Velocity",
+                  "_title": "Mod 3 Velocity",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 0 Cancoder",
+                  "_title": "Mod 0 Cancoder",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 1 Integrated",
+                  "_title": "Mod 1 Integrated",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 3 Cancoder",
+                  "_title": "Mod 3 Cancoder",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 1 Cancoder",
+                  "_title": "Mod 1 Cancoder",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 1 Velocity",
+                  "_title": "Mod 1 Velocity",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 0 Velocity",
+                  "_title": "Mod 0 Velocity",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 2 Cancoder",
+                  "_title": "Mod 2 Cancoder",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 3 Integrated",
+                  "_title": "Mod 3 Integrated",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 2 Integrated",
+                  "_title": "Mod 2 Integrated",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 0 Integrated",
+                  "_title": "Mod 0 Integrated",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Mod 2 Velocity",
+                  "_title": "Mod 2 Velocity",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Current",
+                  "_title": "Current",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AlignP",
+                  "_title": "AlignP",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AlignI",
+                  "_title": "AlignI",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AlignD",
+                  "_title": "AlignD",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Graph",
+                  "_source0": "network_table:///SmartDashboard/Roll Degrees",
+                  "_title": "Roll Degrees",
+                  "_glyph": 148,
+                  "_showGlyph": false,
+                  "Graph/Visible time": 60.0,
+                  "Graph/X-axis auto scrolling": false,
+                  "Y-axis/Automatic bounds": true,
+                  "Y-axis/Upper bound": 1.0,
+                  "Y-axis/Lower bound": -1.0,
+                  "Y-axis/Unit": "ul"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Limelightta",
+                  "_title": "Limelightta",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AlignXSpeed",
+                  "_title": "AlignXSpeed",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AlignYSpeed",
+                  "_title": "AlignYSpeed",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist Setpoint",
+                  "_title": "Wrist Setpoint",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RotationP",
+                  "_title": "RotationP",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RotationI",
+                  "_title": "RotationI",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/RotationD",
+                  "_title": "RotationD",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist Speed",
+                  "_title": "Wrist Speed",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/PID Value",
+                  "_title": "PID Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist speed 2",
+                  "_title": "Wrist speed 2",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "0,0": {
+            "size": [
+              2,
+              5
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Cone Or Cube",
+              "_title": "Cone Or Cube",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#FFFF00FF",
+              "Colors/Color when false": "#BC00BCFF"
+            }
+          },
+          "10,3": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Arm Encoders",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Extension Encoder Value",
+                  "_title": "Extension Encoder Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist Encoder Value",
+                  "_title": "Wrist Encoder Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Dart Digital Encoder Value",
+                  "_title": "Dart Digital Encoder Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "10,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Arm PID Tuning",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist P Value",
+                  "_title": "Wrist P Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist I Value",
+                  "_title": "Wrist I Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Wrist D Value",
+                  "_title": "Wrist D Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Extension P Value",
+                  "_title": "Extension P Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Extension I Value",
+                  "_title": "Extension I Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Extension D Value",
+                  "_title": "Extension D Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Dart P Value",
+                  "_title": "Dart P Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Dart I Value",
+                  "_title": "Dart I Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Dart D Value",
+                  "_title": "Dart D Value",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "2,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight-three",
+              "_title": "limelight-three",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Crosshair/Show crosshair": false,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": false,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
+            }
+          },
+          "9,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Autos",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "List Layout",
+                  "_title": "PathGPT",
+                  "_glyph": 149,
+                  "_showGlyph": false,
+                  "Layout/Label position": "BOTTOM",
+                  "_children": [
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/Piece Number",
+                      "_title": "Piece Number",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    },
+                    {
+                      "_type": "Boolean Box",
+                      "_source0": "network_table:///SmartDashboard/Charge Station",
+                      "_title": "Charge Station",
+                      "_glyph": 148,
+                      "_showGlyph": false,
+                      "Colors/Color when true": "#7CFC00FF",
+                      "Colors/Color when false": "#8B0000FF"
+                    },
+                    {
+                      "_type": "Text View",
+                      "_source0": "network_table:///SmartDashboard/Starting Node",
+                      "_title": "Starting Node",
+                      "_glyph": 148,
+                      "_showGlyph": false
+                    }
+                  ]
+                },
+                {
+                  "_type": "ComboBox Chooser",
+                  "_source0": "network_table:///SmartDashboard/Auto Chooser",
+                  "_title": "Auto Chooser",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Dart PID Speed",
+              "_title": "Dart PID Speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Gyro Values",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/AngleDegrees",
+                  "_title": "AngleDegrees",
+                  "_glyph": 148,
+                  "_showGlyph": false
+                }
+              ]
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/is wrist Down",
+              "_title": "is wrist Down",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/is wrist Up",
+              "_title": "is wrist Up",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "8,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/wrist speed",
+              "_title": "wrist speed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro Yaw Degrees",
+              "_title": "Gyro Yaw Degrees",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/P Value",
+              "_title": "P Value",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/I Value",
+              "_title": "I Value",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/D Value",
+              "_title": "D Value",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/PID Ran",
+              "_title": "PID Ran",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Potentiometer",
+              "_title": "Potentiometer",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "LiveWindow",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "LiveWindow/",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    },
+    {
+      "title": "Debug",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {}
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": -63.0,
+    "y": 93.0,
+    "width": 1616.0,
+    "height": 876.0
+  }
+}
