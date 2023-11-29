@@ -24,13 +24,21 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
+/**
+ * 
+ */
 public class ArmSubsystem extends SubsystemBase {
-
+    /**
+     * identifies a new CANSpark motor: dartMotor
+     */
     private final CANSparkMax dartMotor = new CANSparkMax(9, MotorType.kBrushless);
     //private final CANSparkMax armSlaveMotor = new CANSparkMax(11, MotorType.kBrushless);
     //private final TalonSRX elbowMasterMotor = new TalonSRX(13);
     //private final VictorSPX elbowSlaveMotor = new VictorSPX(19);
     //private SlewRateClass dartLimiter = new SlewRateClass(1000);
+    /**
+     * identifies a new TalonSRX motor: wristMotor
+     */
     private final TalonSRX wristMotor = new TalonSRX(23);
     private final TalonSRX extensionMotor = new TalonSRX(22);
 
@@ -49,7 +57,6 @@ public class ArmSubsystem extends SubsystemBase {
     private final ArmFeedforward wristFeedforward = new ArmFeedforward(0, 0, 0);
 
     private final DigitalInput dartUpperLimit = new DigitalInput(0);
-
     private boolean isWristUp = false;
     private boolean isWristDown = true;
 
@@ -132,13 +139,19 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("is wrist Up", isWristUp);
     }
 
+    /**
+     * resets some PIDs
+     */
     public void reset() {
         wristPID.reset();
         extensionPID.reset();
         dartPID.reset();
     }
 
-    //Moves arm motors at a tenth of the input speed
+    /**
+     * Moves arm motors at a tenth of the input speed
+     * @param speed how fast the arm will move
+     */
     public void moveDart(double speed) {
        // if (getExtensionEncoder() < 0 /* CHANGE LATER */) {
         //    return;
@@ -177,7 +190,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
     */
 
-    //Moves wrist motor
+    /**
+     * moves the wrist
+     * @param speed how fast the wrist will move
+     */
     public void moveWrist(double speed) {
         //SmartDashboard.putNumber("Wrist speed 2", speed);
         //System.out.println(speed);
@@ -199,7 +215,10 @@ public class ArmSubsystem extends SubsystemBase {
         wristMotor.set(ControlMode.PercentOutput, speed);
     }
 
-    //Moves elbow extension motor
+    /**
+     * Moves elbow extension motor
+     * @param speed how fast the elbow will move
+     */
     public void extendArm(double speed) {
         //if (getDartEncoder() < 0 && speed < 0) {}
         //System.out.println(getDartEncoder());
@@ -240,6 +259,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
     */
 
+    /**
+     * 
+     * @param position double of the position of the 
+     * @param isPositive
+     * @return <code>true</code> when feed forward is finished, <code>false</code> otherwise.
+     */
     public boolean feedForwardExtension(double position, boolean isPositive) {
         if (isPositive && position > getExtensionEncoder()) {
             extendArm(-Constants.AutoConstants.maxExtensionSpeed); //may need to multiply by -1
@@ -276,7 +301,10 @@ public class ArmSubsystem extends SubsystemBase {
         }
         return true;
     }
-
+/**
+ * 
+ * @return 
+ */
     public double getDartEncoder() {
         return dartMotor.getEncoder().getPosition();
         //return dartEncoder.getAbsolutePosition();
@@ -325,7 +353,10 @@ public class ArmSubsystem extends SubsystemBase {
     public void setInitial() {
         inverseDartPID.setSetpoint(getDartEncoder());
     }
-
+/**
+ * determines if the wrist can move
+ * @return <code>true</code> if the wrist can move, <code>false</code> if it can't
+ */
     public boolean canWristMove () {
         // if (getDartEncoder() < 25) {
         //     return false;
@@ -387,7 +418,10 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println(String.valueOf(getDartEncoder()) + ", "/* + String.valueOf(getElbowEncoder()) + ", " */+ String.valueOf(getExtensionEncoder()) + ", " + -1/*(getWristEncoder() > 0.8 ? "maxWristEncoder" : "minimumWristEncoder")*/);    
     
     }
-
+/**
+ * 
+ * @return
+ */
     public boolean isFinished() {
         //SmartDashboard.putBoolean("Did Extension PID?", extensionPID.atSetpoint());
         return dartPID.atSetpoint() /*&& elbowPID.atSetpoint() && wristPID.atSetpoint() */&& extensionPID.atSetpoint();
