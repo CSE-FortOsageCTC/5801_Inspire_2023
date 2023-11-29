@@ -18,14 +18,13 @@ public class IntakeCommand extends CommandBase {
   private final IntakeSubsystem m_IntakeSubsystem;
   private Joystick controller;
 
-<<<<<<< HEAD
-=======
+
 /**
  * Contructor for IntakeCommand
  * @param m_IntakeSubsystem Calls intake subsystem
  * @param controller Calls controller
  */
->>>>>>> 2b02b32 (added comments throughout)
+
 public IntakeCommand(IntakeSubsystem m_IntakeSubsystem, Joystick controller){
   this.m_IntakeSubsystem = m_IntakeSubsystem;
   addRequirements(m_IntakeSubsystem);

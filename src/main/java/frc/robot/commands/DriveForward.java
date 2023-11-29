@@ -10,11 +10,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
 /** An example command that uses an example subsystem. */
-<<<<<<< HEAD
-public class DriveForward extends CommandBase {
-    private final Swerve m_SwerveSubsystem;
 
-=======
 /** Tells the code that this is a command
  * RLB
  */
@@ -29,7 +25,7 @@ public class DriveForward extends CommandBase {
      * 
      * RLB
      */
->>>>>>> 2b02b32 (added comments throughout)
+
     public DriveForward(Swerve m_SwerveSubsystem){
         this.m_SwerveSubsystem = m_SwerveSubsystem;
         addRequirements(m_SwerveSubsystem);
