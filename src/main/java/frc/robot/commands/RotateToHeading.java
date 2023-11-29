@@ -1,18 +1,23 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.AutoRotateUtil;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
+/** Tells the code that this is a command */
 public class RotateToHeading extends CommandBase{
     
     private final Swerve s_Swerve;
     private final AutoRotateUtil rotateUtil;
 
     private int m_angle;
+    /** Constructor for RotateToHeading
+     * 
+     * @param s_Swerve Calls s_Swerve
+     * @param angle angle of rotation
+     */
     public RotateToHeading(Swerve s_Swerve, int angle) {
         this.s_Swerve = s_Swerve;
         this.m_angle = angle == 0?360:angle;
@@ -27,15 +32,17 @@ public class RotateToHeading extends CommandBase{
     double speed = rotateUtil.calculateRotationSpeed();
 
     s_Swerve.drive(new Translation2d(0, 0), speed * (Constants.Swerve.maxAngularVelocity), true, true);
-    SmartDashboard.putNumber("Speed", speed);
-
-    
-
+    //SmartDashboard.putNumber("Speed", speed);
    }
 
+   @Override
+   public boolean isFinished() {
+    return rotateUtil.isFinished();
+   }
 
    @Override
    public void end (boolean interupted) {
     s_Swerve.drive(new Translation2d(0, 0), 0, true, true);
+    rotateUtil.reset();
    }
 }

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Swerve;
@@ -28,6 +29,10 @@ public class AutoRotateUtil {
     pidController.reset();
    }
 
+   public void reset() {
+    pidController.reset();
+   }
+
 
    public double calculateRotationSpeed () {
     
@@ -38,7 +43,7 @@ public class AutoRotateUtil {
     this.pidController.setP(kP);
     this.pidController.setI(kI);
     this.pidController.setD(kD);
-    double yaw = s_Swerve.gyro.getYaw();
+    double yaw = ((s_Swerve.gyro.getYaw() % 360) + 360) % 360;
     double headingError = this.m_angle - yaw;
     if (headingError > 180) {
         headingError -= 360;
@@ -47,7 +52,8 @@ public class AutoRotateUtil {
         headingError += 360;
     }
     double speed = pidController.calculate(yaw, yaw + headingError);
-    SmartDashboard.putNumber("Speed", speed);
+    speed = MathUtil.clamp(speed, -1, 1);
+    //SmartDashboard.putNumber("Speed", speed);
     return speed;
 
     
@@ -58,6 +64,10 @@ public class AutoRotateUtil {
     return pidController.atSetpoint();
     //double speed = pidController.calculate(s_Swerve.getYawDouble());
     //return speed < 0.1;
+   }
+
+   public void end(boolean isFinished) {
+    System.out.println("it ended");
    }
 
 }
