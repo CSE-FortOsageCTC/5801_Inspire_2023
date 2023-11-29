@@ -109,7 +109,7 @@ public class RobotContainer {
     return new RotateToHeading(s_Swerve, angle);
 
   }
-
+  /* Sets the robot to cone mode */
   public void setIsCone() {
 
     isCone = true;
@@ -119,6 +119,7 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Cone Or Cube", isCone);
   }
+  /* Sets the robot to cube mode */
   public void setIsCube() {
 
     isCone = false;
