@@ -24,13 +24,21 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
+// Tells the code that this is a subsystem
 public class ArmSubsystem extends SubsystemBase {
 
+<<<<<<< HEAD
+=======
+    /** Identifies new CANSparkMax motor
+     * RLB
+     */
+>>>>>>> 2b02b32 (added comments throughout)
     private final CANSparkMax dartMotor = new CANSparkMax(9, MotorType.kBrushless);
     //private final CANSparkMax armSlaveMotor = new CANSparkMax(11, MotorType.kBrushless);
     //private final TalonSRX elbowMasterMotor = new TalonSRX(13);
     //private final VictorSPX elbowSlaveMotor = new VictorSPX(19);
     //private SlewRateClass dartLimiter = new SlewRateClass(1000);
+<<<<<<< HEAD
     private final TalonSRX wristMotor = new TalonSRX(23);
     private final TalonSRX extensionMotor = new TalonSRX(22);
 
@@ -38,6 +46,32 @@ public class ArmSubsystem extends SubsystemBase {
     //private final PIDController elbowPID = new PIDController(0, 0, 0);
     private final PIDController wristPID = new PIDController(0, 0, 0);
     private final PIDController extensionPID = new PIDController(0, 0, 0);
+=======
+    /** Identifies new TalonSRX motor
+     * RLB
+     */
+    private final TalonSRX wristMotor = new TalonSRX(23);
+    /** Identifies new TalonSRX motor
+     * RLB
+     */
+    private final TalonSRX extensionMotor = new TalonSRX(22);
+    /** Creates new PIDController
+     * RLB
+     */
+    private final PIDController dartPID = new PIDController(0, 0, 0);
+    //private final PIDController elbowPID = new PIDController(0, 0, 0);
+    /** Creates new PIDController
+     * RLB
+     */
+    private final PIDController wristPID = new PIDController(0, 0, 0);
+    /** Creates new PIDController
+     * RLB
+     */
+    private final PIDController extensionPID = new PIDController(0, 0, 0);
+    /** Creates new PIDController
+     * RLB
+     */
+>>>>>>> 2b02b32 (added comments throughout)
     private final PIDController inverseDartPID = new PIDController(0, 0, 0);
 
     private final AnalogEncoder dartEncoder = new AnalogEncoder(0);
