@@ -6,12 +6,18 @@ import frc.robot.AutoRotateUtil;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
+/** Tells the code that this is a command */
 public class RotateToHeading extends CommandBase{
     
     private final Swerve s_Swerve;
     private final AutoRotateUtil rotateUtil;
 
     private int m_angle;
+    /** Constructor for RotateToHeading
+     * 
+     * @param s_Swerve Calls s_Swerve
+     * @param angle angle of rotation
+     */
     public RotateToHeading(Swerve s_Swerve, int angle) {
         this.s_Swerve = s_Swerve;
         this.m_angle = angle == 0?360:angle;
