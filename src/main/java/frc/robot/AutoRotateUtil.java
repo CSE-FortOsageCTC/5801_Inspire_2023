@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Swerve;
@@ -47,6 +48,7 @@ public class AutoRotateUtil {
         headingError += 360;
     }
     double speed = pidController.calculate(yaw, yaw + headingError);
+    speed = MathUtil.clamp(speed, -1, 1);
     SmartDashboard.putNumber("Speed", speed);
     return speed;
 
