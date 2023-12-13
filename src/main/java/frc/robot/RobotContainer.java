@@ -112,6 +112,7 @@ public class RobotContainer {
     m_autoChooser.addOption("A2C Mobility Place Floor (Cone On Top)", new N2CTraverseFloor(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A3Mobility", new N1Mobility(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("A1 High Mobi", new SideNoCharge(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("Uturn", new UTurn(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     //m_autoChooser.addOption("A1B1A1", new A1B1A1(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     //m_autoChooser.addOption("A1B1C", new A1B1C(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     //m_autoChooser.addOption("A3B4A3", new A3B4A3(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
