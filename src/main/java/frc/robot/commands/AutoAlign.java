@@ -33,6 +33,10 @@ public class AutoAlign extends CommandBase {
      * 
      * @param s_Swerve swerve subsystem to be aligned with the april tag
      */
+
+     /*
+      * 
+      */
     public AutoAlign(Swerve s_Swerve, boolean isCone, double maxXSpeed, double maxYSpeed) {
         limelight = new Limelight(isCone);
         this.s_Swerve = s_Swerve;

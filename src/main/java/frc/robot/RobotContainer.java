@@ -119,6 +119,7 @@ public class RobotContainer {
     //m_autoChooser.addOption("A1B1F", new A1B1F(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     m_autoChooser.addOption("PathGPT Auto AI (Need Confirmation)", new InstantCommand(() -> generateAI()));
     //m_autoChooser.addOption("testRotation", new TestRotate(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
+    m_autoChooser.addOption("TestAuto", new TestAuto(s_Swerve, s_ArmSubsystem, s_IntakeSubsystem));
     SmartDashboard.putData("Auto Chooser", m_autoChooser);
 
     SmartDashboard.putNumber("Starting Node", 9);
